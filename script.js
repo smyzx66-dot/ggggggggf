@@ -134,43 +134,6 @@
         // قراءة المصفوفة التي تحتوي فقط على أرقام المحاضرات المكتملة
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
 
-        // ================= بيانات وهمية (Mock Data) =================
-        // هذا يحاكي محتوى ملف data.json الذي كنت تحاول جلبه
-        const mockDB = [
-            {
-                id: 1,
-                name: "أ. محمد أحمد",
-                subject: "الرياضيات",
-                image: "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-                lectures: [
-                    { id: 101, title: "المصفوفات والمحددات", url: "#" },
-                    { id: 102, title: "التفاضل والتكامل - ج1", url: "#" },
-                    { id: 103, title: "الأعداد المركبة", url: "#" }
-                ]
-            },
-            {
-                id: 2,
-                name: "د. سامي علي",
-                subject: "الفيزياء",
-                image: "https://img.freepik.com/free-psd/3d-illustration-person-with-glasses_23-2149436190.jpg",
-                lectures: [
-                    { id: 201, title: "قوانين الحركة لنيوتن", url: "#" },
-                    { id: 202, title: "الشغل والطاقة", url: "#" },
-                    { id: 203, title: "الكهرباء الساكنة", url: "#" }
-                ]
-            },
-            {
-                id: 3,
-                name: "أ. يوسف خليل",
-                subject: "اللغة العربية",
-                image: "https://img.freepik.com/free-psd/3d-illustration-businessman-with-glasses_23-2149436194.jpg",
-                lectures: [
-                    { id: 301, title: "شرح المعلقات السبع", url: "#" },
-                    { id: 302, title: "قواعد النحو - المبتدأ والخبر", url: "#" }
-                ]
-            }
-        ];
-
         // ================= 1. التحقق من تسجيل الدخول =================
         function checkLogin() {
             const input = document.getElementById('passwordInput').value;
@@ -206,11 +169,14 @@
         // ================= 2. جلب البيانات وعرضها =================
         async function loadData() {
             try {
-                // محاكاة تأخير الشبكة لجعل التجربة واقعية
-                // في الواقع هنا نستخدم: const response = await fetch('data.json');
-                await new Promise(resolve => setTimeout(resolve, 500)); 
+                // جلب البيانات من ملف JSON خارجي
+                const response = await fetch('data.json');
                 
-                allData = mockDB; // استخدام البيانات الوهمية
+                if (!response.ok) {
+                    throw new Error('فشل الاتصال بالملف');
+                }
+
+                allData = await response.json();
                 
                 renderApp();
                 updateStats();
@@ -218,7 +184,11 @@
             } catch (error) {
                 console.error("Error loading data:", error);
                 document.getElementById('teachersContainer').innerHTML = 
-                    '<p class="text-center text-red-500 bg-red-50 p-4 rounded-xl">فشل تحميل البيانات.</p>';
+                    `<div class="text-center p-6 bg-red-50 rounded-3xl mx-4">
+                        <div class="text-4xl mb-2">⚠️</div>
+                        <h3 class="font-bold text-red-600 mb-2">فشل تحميل البيانات</h3>
+                        <p class="text-sm text-red-500 mb-4">تأكد من وجود ملف <b>data.json</b> بجانب ملف HTML، وتشغيل الموقع عبر خادم محلي (Localhost).</p>
+                    </div>`;
             }
         }
 
@@ -232,7 +202,7 @@
             allData.forEach(t => totalLectures += t.lectures.length);
             
             if (totalLectures === 0 && allData.length > 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-10">لا توجد محاضرات حالياً.</p>';
+                container.innerHTML = '<p class="text-center text-gray-500 py-10">لا توجد محاضرات في ملف البيانات حالياً.</p>';
                 return;
             }
 
@@ -276,7 +246,7 @@
 
                 teacherCard.innerHTML = `
                     <div class="flex items-center gap-4 border-b border-slate-100 pb-4 mb-4 border-dashed">
-                        <img src="${teacher.image}" class="w-14 h-14 rounded-2xl bg-slate-100 shadow-sm object-cover ring-2 ring-white">
+                        <img src="${teacher.image}" onerror="this.src='https://ui-avatars.com/api/?name=${teacher.name}'" class="w-14 h-14 rounded-2xl bg-slate-100 shadow-sm object-cover ring-2 ring-white">
                         <div>
                             <h2 class="font-black text-lg text-slate-800">${teacher.name}</h2>
                             <span class="text-xs font-bold bg-blue-100 text-blue-700 px-2 py-1 rounded-lg inline-block mt-1">${teacher.subject}</span>
