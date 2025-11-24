@@ -1,25 +1,67 @@
-[
-  {
-    "id": 3,
-    "name": "أ. حيدر وليد",
-    "subject": "الرياضيات",
-    "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
-    "lectures": [
-      { 
-        "id": 301, 
-        "title": "الفصل الأول: الدوال الحقيقية", 
-        "url": "#" 
-      },
-      { 
-        "id": 302, 
-        "title": "الفصل الثاني: النهايات والاستمرارية", 
-        "url": "#" 
-      },
-      { 
-        "id": 303, 
-        "title": "الفصل الثالث: تطبيقات التفاضل", 
-        "url": "#" 
-      }
-    ]
-  }
-]
+{
+  "teachers": [
+    {
+      "id": 3,
+      "name": "أ. حيدر وليد",
+      "subject": "الرياضيات",
+      "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
+      "classes": [
+        {
+          "name": "الفصل الثالث: تطبيقات التفاضل",
+          "lectures": [
+            {
+            "title": "المحاضرة 1",
+              "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4",
+              "description": "المحاضرة الأولى من الفصل الثالث."
+            },
+            {
+              "title": "المحاضرة 2",
+              "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d",
+              "description": "المحاضرة الثانية من الفصل الثالث."
+            },
+            {
+              "title": "المحاضرة 3 - الجزء الأول",
+              "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e",
+              "description": "المحاضرة الثالثة، الجزء الأول."
+            },
+            {
+              "title": "المحاضرة 3 - الجزء الثاني",
+              "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9",
+              "description": "المحاضرة الثالثة، الجزء الثاني."
+            },
+            {
+              "title": "المحاضرة 4 - الجزء الأول",
+              "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
+              "description": "المحاضرة الرابعة، الجزء الأول."
+            },
+            {
+              "title": "المحاضرة 4 - الجزء الثاني",
+              "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
+              "description": ""
+            },
+            {
+              "title": "المحاضرة 5",
+              "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274",
+              "description": "المحاضرة الخامسة من الفصل الثالث."
+            },
+            {
+              "title": "المحاضرة 6",
+              "url": "#",
+              "description": "المحاضرة السادسة من الفصل الثالث."
+            },
+            {
+              "title": "المحاضرة 7",
+              "url": "#",
+              "description": "المحاضرة السابعة من الفصل الثالث."
+            },
+            {
+              "title": "المحاضرة 8",
+              "url": "#",
+              "description": "المحاضرة الثامنة من الفصل الثالث."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
