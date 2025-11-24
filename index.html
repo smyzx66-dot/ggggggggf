@@ -204,51 +204,129 @@
             location.reload();
         }
 
-        // ================= جلب البيانات =================
+        // ================= جلب البيانات (تم تعديل هذا الجزء) =================
         async function loadData() {
             try {
-                // محاكاة بيانات للتجربة في حال عدم وجود ملف
-                // يمكنك حذف هذا الجزء واستخدام الـ fetch فقط
-                const mockData = [
-                    {
-                        "id": 1,
-                        "name": "الأستاذ حميد",
-                        "subject": "اللغة العربية",
-                        "image": "",
-                        "lectures": [
-                            {"id": 101, "title": "أساسيات القواعد - المحاضرة الأولى والمهمة جداً", "url": "https://www.youtube.com/embed/dQw4w9WgXcQ"},
-                            {"id": 102, "title": "شرح الإعراب", "url": "https://www.youtube.com/embed/dQw4w9WgXcQ"}
-                        ]
-                    }
-                ];
+                // دمج بيانات المعلم "أ. حيدر وليد" مباشرة في الكود
+                const dataFromBackend = {
+                    "teachers": [
+                        {
+                            "id": 3,
+                            "name": "أ. حيدر وليد",
+                            "subject": "الرياضيات",
+                            "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
+                            "classes": [
+                                {
+                                    "name": "الفصل الثالث: تطبيقات التفاضل",
+                                    "lectures": [
+                                        {
+                                            "id": 301,
+                                            "title": "المحاضرة 1",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4",
+                                            "description": "المحاضرة الأولى من الفصل الثالث."
+                                        },
+                                        {
+                                            "id": 302,
+                                            "title": "المحاضرة 2",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d",
+                                            "description": "المحاضرة الثانية من الفصل الثالث."
+                                        },
+                                        {
+                                            "id": 303,
+                                            "title": "المحاضرة 3 - الجزء الأول",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e",
+                                            "description": "المحاضرة الثالثة، الجزء الأول."
+                                        },
+                                        {
+                                            "id": 304,
+                                            "title": "المحاضرة 3 - الجزء الثاني",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9",
+                                            "description": "المحاضرة الثالثة، الجزء الثاني."
+                                        },
+                                        {
+                                            "id": 305,
+                                            "title": "المحاضرة 4 - الجزء الأول",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
+                                            "description": "المحاضرة الرابعة، الجزء الأول."
+                                        },
+                                        {
+                                            "id": 306,
+                                            "title": "المحاضرة 4 - الجزء الثاني",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
+                                            "description": "المحاضرة الرابعة، الجزء الثاني."
+                                        },
+                                        {
+                                            "id": 307,
+                                            "title": "المحاضرة 5",
+                                            "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274",
+                                            "description": "المحاضرة الخامسة من الفصل الثالث."
+                                        },
+                                        {
+                                            "id": 308,
+                                            "title": "المحاضرة 6",
+                                            "url": "#",
+                                            "description": "المحاضرة السادسة من الفصل الثالث."
+                                        },
+                                        {
+                                            "id": 309,
+                                            "title": "المحاضرة 7",
+                                            "url": "#",
+                                            "description": "المحاضرة السابعة من الفصل الثالث."
+                                        },
+                                        {
+                                            "id": 310,
+                                            "title": "المحاضرة 8",
+                                            "url": "#",
+                                            "description": "المحاضرة الثامنة من الفصل الثالث."
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                };
 
-                // محاولة الجلب الحقيقي
-                try {
-                    const response = await fetch('data.json');
-                    if (response.ok) {
-                        allData = await response.json();
-                    } else {
-                        allData = mockData; // Fallback
-                    }
-                } catch(e) {
-                    allData = mockData; // Fallback for testing
-                }
+                // تحويل البيانات من الهيكل الجديد إلى الهيكل المتوقع من renderApp 
+                // (دمج جميع المحاضرات من جميع الـ classes في قائمة واحدة لكل معلم)
+                allData = dataFromBackend.teachers.map(teacher => {
+                    let allLectures = [];
+                    // دمج جميع محاضرات الفصول في قائمة واحدة 'lectures' للمعلم 
+                    // (للتوافق مع طريقة معالجة البيانات في دالة renderApp الأصلية)
+                    teacher.classes.forEach(cls => {
+                        cls.lectures.forEach(lecture => {
+                            // إضافة اسم الفصل كبادئة لعنوان المحاضرة لتميزها
+                            const fullTitle = `${cls.name}: ${lecture.title}`;
+                            allLectures.push({
+                                id: lecture.id,
+                                title: fullTitle,
+                                url: lecture.url
+                            });
+                        });
+                    });
+
+                    return {
+                        id: teacher.id,
+                        name: teacher.name,
+                        subject: teacher.subject,
+                        image: teacher.image,
+                        lectures: allLectures // هذه القائمة يستخدمها renderApp
+                    };
+                });
                 
                 renderApp();
                 updateStats();
                 setGreeting();
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Error loading data:", error);
             }
         }
+        // ================= نهاية تعديل loadData =================
 
         // ================= رسم الواجهة =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
-            if(allData.length > 0) container.innerHTML = '';
-            
-            // إعادة رسم "دافع قرآني" ليبقى في الأعلى
-            container.innerHTML += `
+            // احتفظ بـ دافع قرآني إذا كان موجوداً، أو أضفه
+            const QuranicMotive = `
             <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 shadow-sm mx-1 mb-4">
                 <h3 class="flex items-center gap-2 font-black text-sm text-amber-800 mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
@@ -258,8 +336,11 @@
                     "وَقُل رَّبِّ زِدْنِي عِلْمًا" 
                 </blockquote>
             </div>`;
+            
+            container.innerHTML = QuranicMotive;
 
-            if (allData.length === 0) {
+
+            if (!Array.isArray(allData) || allData.length === 0) {
                 container.innerHTML += '<p class="text-center text-gray-400 text-sm mt-10">ماكو محاضرات حالياً</p>';
                 return;
             }
@@ -289,8 +370,8 @@
                             </div>
 
                             <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}')" 
-                                class="mr-2 bg-blue-50 text-blue-600 w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition flex items-center justify-center gap-1 shrink-0 active:scale-95">
-                                <span class="hidden sm:inline">مشاهدة</span>
+                                class="mr-2 ${lecture.url === '#' ? 'bg-slate-50 text-slate-400 cursor-default' : 'bg-blue-50 text-blue-600 hover:bg-blue-100 active:scale-95' } w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shrink-0">
+                                <span class="hidden sm:inline">${lecture.url === '#' ? 'لا يوجد رابط' : 'مشاهدة'}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -331,6 +412,7 @@
 
         function updateStats() {
             let totalLectures = 0;
+            // يجب أن نستخدم allData المجهز الآن
             allData.forEach(t => totalLectures += t.lectures.length);
             
             const completedCount = completedLectures.length;
@@ -356,6 +438,11 @@
         }
 
         function openVideoModal(title, url) {
+            if (url === '#') {
+                alert('عفواً، رابط هذه المحاضرة غير متوفر حالياً.');
+                return;
+            }
+
             const modal = document.getElementById('videoModal');
             const videoContainer = document.getElementById('videoContainer');
             const modalTitle = document.getElementById('modalTitle');
