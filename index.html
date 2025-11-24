@@ -58,6 +58,16 @@
             transition: opacity 0.3s ease;
             backdrop-filter: blur(4px);
         }
+
+        /* Resume Button Pulse Animation */
+        @keyframes soft-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+        .animate-soft-pulse {
+            animation: soft-pulse 2s infinite;
+        }
     </style>
 </head>
 <body class="text-slate-800 bg-slate-50 h-[100dvh] overflow-hidden selection:bg-blue-200 flex flex-col">
@@ -89,7 +99,7 @@
             </div>
             <p id="errorMsg" class="text-rose-300 mt-4 text-sm font-bold hidden transition-opacity bg-red-900/20 py-2 rounded-lg border border-red-500/30">⚠️ الرمز السري غلط!</p>
         </div>
-        <p class="relative text-white/30 text-xs mt-8 font-light">إصدار الهواتف 3.1</p>
+        <p class="relative text-white/30 text-xs mt-8 font-light">إصدار الهواتف 3.2</p>
     </div>
 
     <div id="appScreen" class="hidden h-full flex flex-col relative w-full max-w-md mx-auto sm:max-w-full bg-slate-50 shadow-2xl overflow-hidden">
@@ -134,6 +144,27 @@
 
         <main class="flex-1 overflow-y-auto px-3 sm:px-4 pt-20 pb-24 space-y-4 scroll-smooth w-full" id="teachersContainer">
             
+            <div id="resumeContainer" class="hidden mb-4 mx-1 animate-enter">
+                <button onclick="resumeLastWatched()" class="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white p-4 rounded-2xl shadow-lg shadow-violet-500/20 flex items-center justify-between group animate-soft-pulse relative overflow-hidden">
+                    <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center gap-3 z-10">
+                        <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-[10px] text-violet-200 font-medium mb-0.5">تابـع من حيـث توقفـت</span>
+                            <span class="block text-sm sm:text-base font-bold text-white truncate max-w-[200px]" id="resumeTitle">...</span>
+                        </div>
+                    </div>
+                    <div class="bg-white text-violet-600 px-3 py-1.5 rounded-lg text-xs font-bold z-10 group-active:scale-95 transition-transform">
+                        استمرار ⚡
+                    </div>
+                </button>
+            </div>
+
             <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 shadow-sm mx-1">
                 <h3 class="flex items-center gap-2 font-black text-sm text-amber-800 mb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
@@ -144,7 +175,7 @@
                 </blockquote>
             </div>
 
-            <div class="text-center py-10 text-gray-400 animate-pulse text-sm">جاري تحميل البيانات...</div>
+            <div class="text-center py-10 text-gray-400 animate-pulse text-sm" id="loadingText">جاري تحميل البيانات...</div>
         </main>
     </div>
 
@@ -270,6 +301,7 @@
                 renderApp();
                 updateStats();
                 setGreeting();
+                checkLastWatched(); // التحقق من السجل عند التحميل
             } catch (error) {
                 console.error("Error loading data:", error);
             }
@@ -278,19 +310,11 @@
         // ================= رسم الواجهة =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
-            const QuranicMotive = `
-            <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 shadow-sm mx-1 mb-4">
-                <h3 class="flex items-center gap-2 font-black text-sm text-amber-800 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
-                    دافع قرآني
-                </h3>
-                <blockquote class="text-xs sm:text-sm font-medium text-amber-700 leading-relaxed border-r-2 border-amber-400 pr-2 mr-1">
-                    "وَقُل رَّبِّ زِدْنِي عِلْمًا" 
-                </blockquote>
-            </div>`;
-            
-            container.innerHTML = QuranicMotive;
+            const loadingText = document.getElementById('loadingText');
+            if(loadingText) loadingText.remove(); // إزالة نص التحميل
 
+            // (ملاحظة: زر المشاهدة موجود الآن في HTML ويتم التحكم بإظهاره عبر JS)
+            // (ملاحظة: الدافع القرآني موجود في HTML أيضاً)
 
             if (!Array.isArray(allData) || allData.length === 0) {
                 container.innerHTML += '<p class="text-center text-gray-400 text-sm mt-10">ماكو محاضرات حالياً</p>';
@@ -306,7 +330,6 @@
                 
                 teacher.lectures.forEach((lecture, lIndx) => {
                     const isDone = completedLectures.includes(lecture.id);
-                    // اختيار لون من القائمة بناءً على ترتيب المحاضرة
                     const cardColor = lectureColors[lIndx % lectureColors.length];
                     
                     lecturesHtml += `
@@ -323,7 +346,7 @@
                                 </span>
                             </div>
 
-                            <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}')" 
+                            <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}', ${lecture.id})" 
                                 class="mr-2 ${lecture.url === '#' ? 'bg-white/50 text-slate-400 cursor-default' : 'bg-white text-blue-600 shadow-sm hover:shadow-md active:scale-95' } w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shrink-0">
                                 <span class="hidden sm:inline">${lecture.url === '#' ? 'لا يوجد' : 'مشاهدة'}</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -349,6 +372,38 @@
 
                 container.appendChild(teacherCard);
             });
+        }
+
+        // ================= ميزات "اخر مشاهدة" =================
+        function checkLastWatched() {
+            const lastWatchedData = localStorage.getItem('hameed_lastWatched');
+            const resumeContainer = document.getElementById('resumeContainer');
+            
+            if (lastWatchedData) {
+                const data = JSON.parse(lastWatchedData);
+                document.getElementById('resumeTitle').innerText = data.title;
+                resumeContainer.classList.remove('hidden');
+                
+                // تحريك الزر ليظهر بشكل جميل
+                resumeContainer.classList.remove('opacity-0'); 
+            } else {
+                resumeContainer.classList.add('hidden');
+            }
+        }
+
+        function resumeLastWatched() {
+            const lastWatchedData = localStorage.getItem('hameed_lastWatched');
+            if (lastWatchedData) {
+                const data = JSON.parse(lastWatchedData);
+                openVideoModal(data.title, data.url, data.id, false); // false لعدم إعادة الحفظ (اختياري)
+            }
+        }
+
+        function saveLastWatched(title, url, id) {
+            if (url === '#') return;
+            const data = { title, url, id };
+            localStorage.setItem('hameed_lastWatched', JSON.stringify(data));
+            checkLastWatched(); // تحديث الزر فوراً
         }
 
         // ================= التفاعل =================
@@ -391,10 +446,15 @@
             }
         }
 
-        function openVideoModal(title, url) {
+        function openVideoModal(title, url, id, shouldSave = true) {
             if (url === '#') {
                 alert('عفواً، رابط هذه المحاضرة غير متوفر حالياً.');
                 return;
+            }
+
+            // حفظ في السجل
+            if (shouldSave) {
+                saveLastWatched(title, url, id);
             }
 
             const modal = document.getElementById('videoModal');
