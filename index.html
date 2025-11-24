@@ -3,63 +3,539 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة حميد التعليمية</title>
+    <title>منصة حميد التعليمية برو</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .check-box { transition: all 0.3s; cursor: pointer; }
-        .check-box.completed { background-color: #10b981; border-color: #10b981; color: white; }
+        :root {
+            --primary: #2563eb;
+            --secondary: #10b981;
+        }
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: #f8fafc; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* تأثيرات الحركة */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-enter { animation: fade-in-up 0.5s ease-out forwards; }
+        
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* تأثيرات Checkbox */
+        .check-box-wrapper input:checked + div {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .check-box-wrapper input:checked + div svg { stroke-dashoffset: 0; }
+        
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            pointer-events: none; z-index: 100;
+        }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="text-slate-800 bg-slate-50 h-screen overflow-hidden selection:bg-blue-200">
 
-    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-900 to-blue-700 p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center">
-            <h1 class="text-3xl font-black text-blue-800 mb-2">منصة حميد</h1>
-            <p class="text-gray-500 mb-6">بوابة الطالب التعليمية</p>
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- ================= شاشة تسجيل الدخول ================= -->
+    <div id="loginScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[url('https://img.freepik.com/free-vector/gradient-geometric-shapes-dark-background_23-2148433767.jpg')] bg-cover bg-center transition-all duration-700">
+        <div class="absolute inset-0 bg-blue-900/80 backdrop-blur-sm"></div>
+        
+        <div class="relative bg-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center border border-white/20 animate-enter">
+            <div class="w-24 h-24 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl shadow-lg ring-4 ring-white/20">
+                👨‍🎓
+            </div>
+            <h1 class="text-3xl font-extrabold text-white mb-2 tracking-wide">منصة حميد</h1>
+            <p class="text-blue-200 mb-8 font-medium text-sm">بوابتك للتميز الأكاديمي</p>
             
-            <input type="password" id="passwordInput" placeholder="كلمة المرور" 
-                class="w-full p-4 bg-gray-100 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white outline-none transition text-center text-lg mb-4">
-            
-            <button onclick="checkLogin()" 
-                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition transform active:scale-95">
-                دخول
-            </button>
-            <p id="errorMsg" class="text-red-500 mt-3 text-sm hidden">كلمة المرور غير صحيحة</p>
+            <div class="space-y-4">
+                <div class="relative group">
+                    <input type="password" id="passwordInput" placeholder="كلمة المرور (1234)" 
+                        class="w-full p-4 pl-12 bg-white/90 rounded-2xl border-2 border-transparent focus:border-cyan-400 focus:bg-white outline-none transition text-center text-lg placeholder-slate-400 text-slate-800 shadow-inner">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔒</span>
+                </div>
+                
+                <button onclick="checkLogin()" 
+                    class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/30 transition transform active:scale-95 text-lg flex items-center justify-center gap-2 group">
+                    <span>تسجيل الدخول</span>
+                    <svg class="w-5 h-5 group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14"></path></svg>
+                </button>
+            </div>
+            <p id="errorMsg" class="text-rose-400 mt-4 text-sm font-bold opacity-0 transition-opacity bg-white/10 py-2 rounded-lg">⚠️ كلمة المرور غير صحيحة</p>
         </div>
+        <p class="relative text-white/40 text-xs mt-8 font-light">الإصدار 2.0 - جميع الحقوق محفوظة</p>
     </div>
 
-    <div id="appScreen" class="hidden min-h-screen pb-20">
+    <!-- ================= تطبيق المنصة ================= -->
+    <div id="appScreen" class="hidden h-full flex flex-col relative">
         
-        <header class="bg-blue-800 text-white p-6 rounded-b-3xl shadow-lg mb-6">
-            <div class="flex justify-between items-center mb-6">
+        <!-- الهيدر -->
+        <header class="bg-blue-900 text-white p-6 pb-12 rounded-b-[3rem] shadow-2xl z-10 relative overflow-hidden shrink-0">
+            <!-- خلفية جمالية للهيدر -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            <div class="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl -ml-10 -mb-10"></div>
+
+            <div class="relative flex justify-between items-start mb-6">
                 <div>
-                    <h1 class="text-2xl font-black">أهلاً بك في منصة حميد 👋</h1>
-                    <p class="text-blue-200 text-sm">رحلتك نحو التفوق تبدأ هنا</p>
+                    <p class="text-cyan-300 text-sm font-bold mb-1" id="dateDisplay">--/--/----</p>
+                    <h1 class="text-3xl font-black mb-1" id="greetingMsg">أهلاً، حميد</h1>
+                    <p class="text-blue-200 text-xs opacity-80">جاهز لتحقيق أهدافك اليوم؟ 🚀</p>
                 </div>
-                <button onclick="logout()" class="bg-blue-700 p-2 rounded-lg text-xs hover:bg-blue-600">خروج</button>
+                <button onclick="logout()" class="bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-2xl text-white transition border border-white/10 shadow-lg group">
+                    <svg class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
             </div>
 
-            <div class="bg-white/10 p-4 rounded-xl backdrop-blur-md border border-white/20 flex justify-between items-center">
-                <div>
-                    <span class="block text-blue-200 text-sm">المحاضرات المكتملة</span>
-                    <span class="text-3xl font-bold" id="statsCount">0</span>
-                    <span class="text-sm text-blue-200" id="statsTotal">/ 0</span>
-                </div>
-                <div class="h-12 w-12 rounded-full border-4 border-green-400 flex items-center justify-center bg-white text-green-600 font-bold" id="percentage">
-                    0%
+            <!-- بطاقة الإحصائيات العائمة -->
+            <div class="absolute left-6 right-6 -bottom-10">
+                <div class="bg-white p-4 rounded-3xl shadow-xl border border-slate-100 flex justify-between items-center">
+                    <div class="flex-1 border-l border-slate-100 pl-4 ml-4">
+                        <span class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">نسبة الإنجاز</span>
+                        <div class="flex items-end gap-2">
+                            <span class="text-4xl font-black text-slate-800" id="percentage">0%</span>
+                            <span class="text-xs text-green-500 font-bold mb-2 bg-green-50 px-2 py-0.5 rounded-full">ممتاز ✨</span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-left">
+                        <div class="text-xs text-slate-400 font-bold mb-1">المهام المكتملة</div>
+                        <div class="text-xl font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-xl inline-block">
+                            <span id="statsCount">0</span>
+                            <span class="text-slate-300 mx-1">/</span>
+                            <span id="statsTotal" class="text-slate-400 text-sm">0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <main class="container mx-auto px-4" id="teachersContainer">
-            <div class="text-center py-10 text-gray-500">جاري تحميل البيانات...</div>
-        </main>
+        <!-- أدوات التحكم والفلتر -->
+        <div class="mt-14 px-6 flex justify-between items-center shrink-0 mb-2">
+            <div class="flex bg-slate-200 p-1 rounded-xl gap-1">
+                <button onclick="setFilter('all')" id="btn-all" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-white shadow-sm text-slate-800">الكل</button>
+                <button onclick="setFilter('active')" id="btn-active" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-500 hover:bg-white/50">المتبقي</button>
+                <button onclick="setFilter('completed')" id="btn-completed" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-500 hover:bg-white/50">المكتمل</button>
+            </div>
+            
+            <button onclick="openAddTaskModal()" class="bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30 transition active:scale-90">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </button>
+        </div>
 
+        <!-- المحتوى الرئيسي -->
+        <main class="flex-1 overflow-y-auto px-4 py-2 pb-24 space-y-5 scroll-smooth" id="teachersContainer">
+            <!-- Content Injected Here -->
+        </main>
     </div>
 
-    <script src="script.js"></script>
+    <!-- نافذة إضافة مهمة -->
+    <div id="addTaskModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeAddTaskModal()"></div>
+        <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-[2rem] p-6 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.2)] animate-enter transform transition-transform">
+            <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-6"></div>
+            <h3 class="text-xl font-bold text-slate-800 mb-4">إضافة مهمة خاصة 📝</h3>
+            
+            <input type="text" id="newTaskTitle" placeholder="مثال: مراجعة الفصل الأول..." 
+                class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 focus:border-blue-500 focus:bg-white outline-none mb-4 text-right">
+            
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="addTask('الرياضيات')" class="bg-orange-50 text-orange-600 py-3 rounded-xl text-sm font-bold border border-orange-100 hover:bg-orange-100">رياضيات 📐</button>
+                <button onclick="addTask('الفيزياء')" class="bg-purple-50 text-purple-600 py-3 rounded-xl text-sm font-bold border border-purple-100 hover:bg-purple-100">فيزياء ⚡</button>
+                <button onclick="addTask('اللغة العربية')" class="bg-emerald-50 text-emerald-600 py-3 rounded-xl text-sm font-bold border border-emerald-100 hover:bg-emerald-100">عربي 📖</button>
+                <button onclick="addTask('عام')" class="bg-slate-100 text-slate-600 py-3 rounded-xl text-sm font-bold border border-slate-200 hover:bg-slate-200">مهمة عامة 📌</button>
+            </div>
+
+            <button onclick="closeAddTaskModal()" class="w-full text-slate-400 font-medium py-3">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. إعداد البيانات والبيئة ---
+        const defaultDB = [
+            {
+                id: 1,
+                subject: "الرياضيات",
+                teacher: "أ. محمد أحمد",
+                theme: "orange",
+                icon: "📐",
+                lectures: [
+                    { id: 101, title: "المصفوفات والمحددات", completed: false },
+                    { id: 102, title: "التفاضل والتكامل - ج1", completed: false },
+                    { id: 103, title: "الأعداد المركبة", completed: false }
+                ]
+            },
+            {
+                id: 2,
+                subject: "الفيزياء",
+                teacher: "د. سامي علي",
+                theme: "purple",
+                icon: "⚡",
+                lectures: [
+                    { id: 201, title: "قوانين الحركة لنيوتن", completed: true },
+                    { id: 202, title: "الشغل والطاقة", completed: false },
+                    { id: 203, title: "الكهرباء الساكنة", completed: false }
+                ]
+            },
+            {
+                id: 3,
+                subject: "اللغة العربية",
+                teacher: "أ. يوسف خليل",
+                theme: "emerald",
+                icon: "📖",
+                lectures: [
+                    { id: 301, title: "شرح المعلقات السبع", completed: false },
+                    { id: 302, title: "قواعد النحو - المبتدأ والخبر", completed: true }
+                ]
+            },
+            {
+                id: 4,
+                subject: "مهام عامة",
+                teacher: "قائمتي الخاصة",
+                theme: "slate",
+                icon: "📌",
+                lectures: [] // For custom tasks
+            }
+        ];
+
+        let appData = JSON.parse(localStorage.getItem('hameedApp_v2_data')) || defaultDB;
+        let currentFilter = 'all';
+
+        // خريطة الألوان للتيمات
+        const themes = {
+            orange: { bg: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-100', iconBg: 'bg-orange-100' },
+            purple: { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-100', iconBg: 'bg-purple-100' },
+            emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-100', iconBg: 'bg-emerald-100' },
+            slate: { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-200', iconBg: 'bg-slate-200' }
+        };
+
+        // --- 2. المنطق الأساسي (Core Logic) ---
+
+        function init() {
+            setGreeting();
+            // التحقق من وجود جلسة دخول سابقة
+            if (localStorage.getItem('hameedApp_isLoggedIn') === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('appScreen').classList.remove('hidden');
+                renderApp();
+            }
+        }
+
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greeting = hour < 12 ? "صباح الخير، حميد ☀️" : "مساء الخير، حميد 🌙";
+            document.getElementById('greetingMsg').innerText = greeting;
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+            document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-EG', options);
+        }
+
+        function checkLogin() {
+            const pass = document.getElementById('passwordInput').value;
+            const error = document.getElementById('errorMsg');
+            
+            if (pass === '1234') {
+                error.style.opacity = '0';
+                localStorage.setItem('hameedApp_isLoggedIn', 'true');
+                
+                // حركة خروج ناعمة
+                const screen = document.getElementById('loginScreen');
+                screen.style.opacity = '0';
+                screen.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    screen.classList.add('hidden');
+                    document.getElementById('appScreen').classList.remove('hidden');
+                    renderApp();
+                }, 600);
+            } else {
+                error.classList.remove('hidden');
+                setTimeout(() => error.style.opacity = '1', 10);
+                document.getElementById('passwordInput').classList.add('border-rose-400', 'bg-rose-50');
+                setTimeout(() => {
+                    document.getElementById('passwordInput').classList.remove('border-rose-400', 'bg-rose-50');
+                }, 2000);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('hameedApp_isLoggedIn');
+            location.reload();
+        }
+
+        function saveData() {
+            localStorage.setItem('hameedApp_v2_data', JSON.stringify(appData));
+            renderStats();
+            renderLecturesList();
+        }
+
+        function toggleLecture(subjectIndex, lectureIndex) {
+            const lecture = appData[subjectIndex].lectures[lectureIndex];
+            lecture.completed = !lecture.completed;
+            
+            if (lecture.completed) {
+                // تشغيل تأثير بسيط عند الإنجاز
+                triggerConfetti(0.3); 
+            }
+            
+            // تحقق إذا تم إنجاز المادة بالكامل
+            const isSubjectDone = appData[subjectIndex].lectures.every(l => l.completed);
+            if (isSubjectDone && appData[subjectIndex].lectures.length > 0 && lecture.completed) {
+                setTimeout(() => triggerConfetti(1), 300); // احتفال أكبر
+            }
+
+            saveData();
+        }
+
+        function setFilter(filterType) {
+            currentFilter = filterType;
+            // تحديث ستايل الأزرار
+            ['all', 'active', 'completed'].forEach(type => {
+                const btn = document.getElementById(`btn-${type}`);
+                if (type === filterType) {
+                    btn.className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-white shadow-sm text-slate-800 transform scale-105";
+                } else {
+                    btn.className = "px-4 py-2 rounded-lg text-xs font-bold transition text-slate-500 hover:bg-white/50";
+                }
+            });
+            renderLecturesList();
+        }
+
+        function deleteLecture(subjectIndex, lectureIndex) {
+            if(confirm('هل أنت متأكد من حذف هذه المهمة؟')) {
+                appData[subjectIndex].lectures.splice(lectureIndex, 1);
+                saveData();
+            }
+        }
+
+        // --- 3. إدارة المهام الجديدة ---
+
+        function openAddTaskModal() {
+            document.getElementById('addTaskModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('newTaskTitle').focus(), 100);
+        }
+
+        function closeAddTaskModal() {
+            document.getElementById('addTaskModal').classList.add('hidden');
+            document.getElementById('newTaskTitle').value = '';
+        }
+
+        function addTask(categoryName) {
+            const title = document.getElementById('newTaskTitle').value;
+            if (!title) return alert('الرجاء كتابة عنوان المهمة');
+
+            // البحث عن المادة المناسبة أو إضافتها في "مهام عامة"
+            let subjectIndex = appData.findIndex(s => s.subject.includes(categoryName));
+            if (subjectIndex === -1) subjectIndex = 3; // Default to General
+
+            appData[subjectIndex].lectures.push({
+                id: Date.now(),
+                title: title,
+                completed: false,
+                isCustom: true
+            });
+
+            saveData();
+            closeAddTaskModal();
+        }
+
+        // --- 4. العرض (Rendering) ---
+
+        function renderStats() {
+            let total = 0;
+            let completed = 0;
+
+            appData.forEach(subject => {
+                subject.lectures.forEach(lec => {
+                    total++;
+                    if (lec.completed) completed++;
+                });
+            });
+
+            // Animate Numbers
+            animateValue("statsCount", parseInt(document.getElementById("statsCount").innerText), completed, 500);
+            document.getElementById('statsTotal').innerText = total;
+            
+            const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+            animateValue("percentage", parseInt(document.getElementById("percentage").innerText), percent, 500, "%");
+        }
+
+        function animateValue(id, start, end, duration, suffix = "") {
+            if (start === end) return;
+            const range = end - start;
+            let current = start;
+            const increment = end > start ? 1 : -1;
+            const stepTime = Math.abs(Math.floor(duration / range));
+            const obj = document.getElementById(id);
+            const timer = setInterval(function() {
+                current += increment;
+                obj.innerHTML = current + suffix;
+                if (current == end) clearInterval(timer);
+            }, stepTime > 10 ? stepTime : 10); // Min 10ms to prevent lag
+        }
+
+        function renderLecturesList() {
+            const container = document.getElementById('teachersContainer');
+            container.innerHTML = '';
+
+            let hasContent = false;
+
+            appData.forEach((subject, sIndex) => {
+                // تصفية المحاضرات بناءً على الفلتر المختار
+                const filteredLectures = subject.lectures.filter(lec => {
+                    if (currentFilter === 'all') return true;
+                    if (currentFilter === 'active') return !lec.completed;
+                    if (currentFilter === 'completed') return lec.completed;
+                });
+
+                if (filteredLectures.length === 0) return; // تخطي المادة إذا لم يكن بها محاضرات تطابق الفلتر
+
+                hasContent = true;
+                const theme = themes[subject.theme];
+                const subTotal = subject.lectures.length;
+                const subDone = subject.lectures.filter(l => l.completed).length;
+                const subPercent = subTotal === 0 ? 0 : Math.round((subDone / subTotal) * 100);
+
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-enter`;
+                card.style.animationDelay = `${sIndex * 100}ms`; // Staggered animation
+                
+                let lecturesHTML = '';
+                
+                // نحتاج إلى الحصول على الفهرس الأصلي للمحاضرة داخل المصفوفة الأساسية
+                subject.lectures.forEach((lec, originalIndex) => {
+                    // تحقق من الفلتر مرة أخرى هنا للعرض
+                    if (currentFilter === 'active' && lec.completed) return;
+                    if (currentFilter === 'completed' && !lec.completed) return;
+
+                    lecturesHTML += `
+                        <div class="flex items-center justify-between group mb-3 last:mb-0">
+                            <label class="check-box-wrapper flex items-center flex-1 cursor-pointer select-none">
+                                <div class="relative">
+                                    <input type="checkbox" class="sr-only" 
+                                        ${lec.completed ? 'checked' : ''} 
+                                        onchange="toggleLecture(${sIndex}, ${originalIndex})">
+                                    <div class="w-6 h-6 border-2 border-slate-300 rounded-lg flex items-center justify-center transition-all duration-300 bg-white shadow-sm">
+                                        <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all duration-300 stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                </div>
+                                <span class="mr-3 text-sm font-semibold text-slate-700 transition-all duration-300 ${lec.completed ? 'line-through text-slate-400 opacity-60' : ''}">
+                                    ${lec.title}
+                                </span>
+                            </label>
+                            ${lec.isCustom ? `
+                                <button onclick="deleteLecture(${sIndex}, ${originalIndex})" class="text-rose-300 hover:text-rose-500 p-2 opacity-0 group-hover:opacity-100 transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4 border-b ${theme.border} pb-3 border-dashed">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl ${theme.iconBg} ${theme.text} flex items-center justify-center text-lg shadow-sm">
+                                ${subject.icon}
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-base">${subject.subject}</h3>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-wide uppercase">${subject.teacher}</p>
+                            </div>
+                        </div>
+                        <div class="relative w-10 h-10 flex items-center justify-center">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="20" cy="20" r="16" stroke="currentColor" stroke-width="3" fill="transparent" class="text-slate-100" />
+                                <circle cx="20" cy="20" r="16" stroke="currentColor" stroke-width="3" fill="transparent" 
+                                    class="${subPercent === 100 ? 'text-green-500' : 'text-blue-500'} transition-all duration-1000" 
+                                    stroke-dasharray="100" stroke-dashoffset="${100 - subPercent}" stroke-linecap="round" />
+                            </svg>
+                            <span class="absolute text-[9px] font-bold text-slate-600">${subPercent}%</span>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        ${lecturesHTML}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            if (!hasContent) {
+                container.innerHTML = `
+                    <div class="text-center py-20 animate-enter">
+                        <div class="text-6xl mb-4 grayscale opacity-50">🏝️</div>
+                        <p class="text-slate-400 font-bold">لا توجد محاضرات هنا حالياً!</p>
+                        <button onclick="setFilter('all')" class="text-blue-500 text-sm mt-2 font-bold hover:underline">عرض الكل</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderApp() {
+            renderLecturesList();
+            renderStats();
+        }
+
+        // --- 5. نظام الاحتفال (Confetti) ---
+        function triggerConfetti(intensity = 1) {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 100 * intensity;
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2, // Start from center
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.5) * 20 - 5, // Upward bias
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 8 + 4,
+                    life: 100
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let activeParticles = false;
+                
+                particles.forEach(p => {
+                    if (p.life > 0) {
+                        activeParticles = true;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.5; // Gravity
+                        p.life--;
+                        p.size *= 0.96; // Shrink
+                        
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x, p.y, p.size, p.size);
+                    }
+                });
+                
+                if (activeParticles) requestAnimationFrame(animate);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            animate();
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
 </body>
 </html>
