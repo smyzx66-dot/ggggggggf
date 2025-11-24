@@ -48,7 +48,6 @@
 
     <canvas id="confetti-canvas"></canvas>
 
-    <!-- ================= شاشة تسجيل الدخول ================= -->
     <div id="loginScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[url('https://img.freepik.com/free-vector/gradient-geometric-shapes-dark-background_23-2148433767.jpg')] bg-cover bg-center transition-all duration-700">
         <div class="absolute inset-0 bg-blue-900/80 backdrop-blur-sm"></div>
         
@@ -77,12 +76,9 @@
         <p class="relative text-white/40 text-xs mt-8 font-light">الإصدار 3.0</p>
     </div>
 
-    <!-- ================= تطبيق المنصة ================= -->
     <div id="appScreen" class="hidden h-full flex flex-col relative">
         
-        <!-- الهيدر -->
         <header class="bg-blue-900 text-white p-6 pb-12 rounded-b-[3rem] shadow-2xl z-10 relative overflow-hidden shrink-0">
-            <!-- خلفية جمالية للهيدر -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
             <div class="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
@@ -97,7 +93,6 @@
                 </button>
             </div>
 
-            <!-- بطاقة الإحصائيات العائمة -->
             <div class="absolute left-6 right-6 -bottom-10">
                 <div class="bg-white p-4 rounded-3xl shadow-xl border border-slate-100 flex justify-between items-center">
                     <div class="flex-1 border-l border-slate-100 pl-4 ml-4">
@@ -120,21 +115,58 @@
             </div>
         </header>
 
-        <!-- المحتوى الرئيسي -->
         <main class="flex-1 overflow-y-auto px-4 pt-16 pb-24 space-y-5 scroll-smooth" id="teachersContainer">
-            <!-- سيتم توليد المحتوى هنا -->
             <div class="text-center py-10 text-gray-400 animate-pulse">جاري تحميل البيانات...</div>
         </main>
     </div>
 
     <script>
+        // ================= البيانات المُضمّنة (المُعدّلة) =================
+        const INLINE_DATA = [
+            {
+                "id": 1,
+                "name": "أ. محمد علي",
+                "subject": "الرياضيات",
+                "image": "https://randomuser.me/api/portraits/men/1.jpg",
+                "lectures": [
+                    { "id": 101, "title": "مراجعة أساسيات التفاضل", "url": "https://youtube.com/watch?v=math1" },
+                    { "id": 102, "title": "المعادلات اللوغاريتمية", "url": "https://youtube.com/watch?v=math2" },
+                    { "id": 103, "title": "الاحتمالات المشروطة", "url": "https://youtube.com/watch?v=math3" }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "أ. سارة أحمد",
+                "subject": "اللغة العربية",
+                "image": "https://randomuser.me/api/portraits/women/2.jpg",
+                "lectures": [
+                    { "id": 201, "title": "قواعد النحو: المنصوبات", "url": "https://youtube.com/watch?v=arabic1" },
+                    { "id": 202, "title": "مهارات القراءة السريعة", "url": "https://youtube.com/watch?v=arabic2" }
+                ]
+            },
+            {
+                "id": 3,
+                "name": "د. علي حسين",
+                "subject": "الكيمياء",
+                "image": "https://randomuser.me/api/portraits/men/3.jpg",
+                "lectures": [
+                    { "id": 301, "title": "مقدمة في الكيمياء العضوية", "url": "https://youtube.com/watch?v=chem1" },
+                    { "id": 302, "title": "تفاعلات الأكسدة والاختزال", "url": "https://youtube.com/watch?v=chem2" },
+                    { "id": 303, "title": "حساب التركيز المولاري", "url": "https://youtube.com/watch?v=chem3" },
+                    { "id": 304, "title": "مراجعة ليلة الامتحان", "url": "https://youtube.com/watch?v=chem4" }
+                ]
+            }
+        ];
+
+
         // ================= المتغيرات العامة =================
         const PASSWORD = "123";
-        let allData = [];
+        // تم استبدال `allData` هنا لتكون فارغة في البداية
+        let allData = []; 
         // قراءة المصفوفة التي تحتوي فقط على أرقام المحاضرات المكتملة
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
 
-        // ================= 1. التحقق من تسجيل الدخول =================
+        // ================= 1. التحقق من تسجيل الدخول (لم يتغير) =================
         function checkLogin() {
             const input = document.getElementById('passwordInput').value;
             const error = document.getElementById('errorMsg');
@@ -166,33 +198,17 @@
             location.reload();
         }
 
-        // ================= 2. جلب البيانات وعرضها =================
-        async function loadData() {
-            try {
-                // جلب البيانات من ملف JSON خارجي
-                const response = await fetch('data.json');
-                
-                if (!response.ok) {
-                    throw new Error('فشل الاتصال بالملف');
-                }
-
-                allData = await response.json();
-                
-                renderApp();
-                updateStats();
-                setGreeting();
-            } catch (error) {
-                console.error("Error loading data:", error);
-                document.getElementById('teachersContainer').innerHTML = 
-                    `<div class="text-center p-6 bg-red-50 rounded-3xl mx-4">
-                        <div class="text-4xl mb-2">⚠️</div>
-                        <h3 class="font-bold text-red-600 mb-2">فشل تحميل البيانات</h3>
-                        <p class="text-sm text-red-500 mb-4">تأكد من وجود ملف <b>data.json</b> بجانب ملف HTML، وتشغيل الموقع عبر خادم محلي (Localhost).</p>
-                    </div>`;
-            }
+        // ================= 2. جلب البيانات وعرضها (المُعدّلة) =================
+        function loadData() {
+            // **التعديل هنا:** بدلاً من جلب ملف JSON خارجي، نستخدم البيانات المُضمّنة
+            allData = INLINE_DATA; 
+            
+            renderApp();
+            updateStats();
+            setGreeting();
         }
 
-        // ================= 3. رسم الواجهة =================
+        // ================= 3. رسم الواجهة (لم يتغير) =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
             container.innerHTML = '';
@@ -219,7 +235,6 @@
                     
                     lecturesHtml += `
                         <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors group mb-2 last:mb-0">
-                            <!-- الجزء الأيمن: Checkbox والعنوان -->
                             <div class="flex items-center gap-3 flex-1 cursor-pointer select-none" onclick="toggleComplete(${lecture.id})">
                                 <div class="check-box-wrapper relative">
                                     <input type="checkbox" class="sr-only" ${isDone ? 'checked' : ''}>
@@ -232,7 +247,6 @@
                                 </span>
                             </div>
 
-                            <!-- زر المشاهدة -->
                             <a href="${lecture.url}" target="_blank" class="mr-2 bg-blue-50 text-blue-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition flex items-center gap-1 shrink-0">
                                 <span class="hidden md:inline">شاهد</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -259,7 +273,7 @@
             });
         }
 
-        // ================= 4. وظيفة تبديل حالة الإكمال =================
+        // ================= 4. وظيفة تبديل حالة الإكمال (لم تتغير) =================
         function toggleComplete(id) {
             if (completedLectures.includes(id)) {
                 completedLectures = completedLectures.filter(item => item !== id);
@@ -275,7 +289,7 @@
             updateStats(); // تحديث الأرقام
         }
 
-        // ================= 5. تحديث الإحصائيات =================
+        // ================= 5. تحديث الإحصائيات (لم تتغير) =================
         function updateStats() {
             let totalLectures = 0;
             allData.forEach(t => totalLectures += t.lectures.length);
@@ -304,7 +318,7 @@
             }
         }
 
-        // ================= وظائف مساعدة =================
+        // ================= وظائف مساعدة (لم تتغير) =================
         function setGreeting() {
             const hour = new Date().getHours();
             const greeting = hour < 12 ? "صباح الخير، حميد ☀️" : "مساء الخير، حميد 🌙";
@@ -371,7 +385,7 @@
             animate();
         }
 
-        // ================= التهيئة =================
+        // ================= التهيئة (المُعدّلة) =================
         document.addEventListener('DOMContentLoaded', () => {
             // التحقق التلقائي عند التحميل
             if (localStorage.getItem('hameedApp_isLoggedIn') === 'true') {
