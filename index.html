@@ -74,7 +74,7 @@
     <div id="loginScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[url('https://img.freepik.com/free-vector/gradient-geometric-shapes-dark-background_23-2148433767.jpg')] bg-cover bg-center transition-all duration-700">
         <div class="absolute inset-0 bg-blue-900/80 backdrop-blur-sm"></div>
         
-        <div class="relative bg-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center border border-white/20 animate-enter">
+        <div class="relative bg-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center border border-white/20 animate-enter mx-4">
             <div class="w-24 h-24 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl shadow-lg ring-4 ring-white/20">
                 📚
             </div>
@@ -101,7 +101,7 @@
 
     <div id="appScreen" class="hidden h-full flex flex-col relative">
         
-        <header class="bg-blue-900 text-white p-6 pb-12 rounded-b-[3rem] shadow-2xl z-10 relative overflow-hidden shrink-0">
+        <header class="bg-blue-900 text-white p-4 sm:p-6 pb-12 rounded-b-[3rem] shadow-2xl z-10 relative overflow-hidden shrink-0">
             <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
             <div class="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
@@ -116,19 +116,20 @@
                 </button>
             </div>
 
-            <div class="absolute left-6 right-6 -bottom-10">
+            <div class="absolute left-4 right-4 sm:left-6 sm:right-6 -bottom-10">
                 <div class="bg-white p-4 rounded-3xl shadow-xl border border-slate-100 flex justify-between items-center">
+                    
                     <div class="flex-1 border-l border-slate-100 pl-4 ml-4">
                         <span class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">نسبة الإنجاز</span>
                         <div class="flex items-end gap-2">
-                            <span class="text-4xl font-black text-slate-800" id="percentage">0%</span>
-                            <span class="text-xs text-green-500 font-bold mb-2 bg-green-50 px-2 py-0.5 rounded-full" id="statusBadge">زين عاشت إيدك 👍</span>
+                            <span class="text-3xl sm:text-4xl font-black text-slate-800" id="percentage">0%</span>
+                            <span class="text-xs text-green-500 font-bold mb-1 sm:mb-2 bg-green-50 px-2 py-0.5 rounded-full" id="statusBadge">زين عاشت إيدك 👍</span>
                         </div>
                     </div>
                     
                     <div class="text-left">
                         <div class="text-xs text-slate-400 font-bold mb-1">الدروس المخلصة</div>
-                        <div class="text-xl font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-xl inline-block">
+                        <div class="text-lg sm:text-xl font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-xl inline-block">
                             <span id="statsCount">0</span>
                             <span class="text-slate-300 mx-1">/</span>
                             <span id="statsTotal" class="text-slate-400 text-sm">0</span>
@@ -138,9 +139,9 @@
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto px-4 pt-16 pb-24 space-y-5 scroll-smooth" id="teachersContainer">
+        <main class="flex-1 overflow-y-auto px-2 sm:px-4 pt-16 pb-24 space-y-5 scroll-smooth" id="teachersContainer">
             
-            <div class="bg-amber-50 border-amber-200 border-2 rounded-3xl p-5 shadow-inner mx-4">
+            <div class="bg-amber-50 border-amber-200 border-2 rounded-3xl p-5 shadow-inner mx-2 sm:mx-4">
                 <h3 class="flex items-center gap-2 font-black text-lg text-amber-800 mb-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
                     دافع إلك من القرآن
@@ -180,7 +181,7 @@
         let allData = [];
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
 
-        // ================= 1. التحقق من تسجيل الدخول (ما تغير) =================
+        // ================= 1. التحقق من تسجيل الدخول =================
         function checkLogin() {
             const input = document.getElementById('passwordInput').value;
             const error = document.getElementById('errorMsg');
@@ -209,7 +210,7 @@
             location.reload();
         }
 
-        // ================= 2. جلب البيانات وعرضها (يرجع لملف data.json) =================
+        // ================= 2. جلب البيانات وعرضها =================
         async function loadData() {
             try {
                 // لازم يكون ملف data.json موجود بصفحة الـ HTML
@@ -227,15 +228,15 @@
             } catch (error) {
                 console.error("مشكلة بتحميل البيانات:", error);
                 document.getElementById('teachersContainer').innerHTML = 
-                    `<div class="text-center p-6 bg-red-50 rounded-3xl mx-4">
+                    `<div class="text-center p-6 bg-red-50 rounded-3xl mx-2 sm:mx-4">
                         <div class="text-4xl mb-2">😭</div>
                         <h3 class="font-bold text-red-600 mb-2">فشلت عملية تحميل البيانات</h3>
-                        <p class="text-sm text-red-500 mb-4">تأكد انو ملف <b>data.json</b> موجود يَم ملف الـ HTML، ودا تشغل الموقع على خادم محلي (Localhost). </p>
+                        <p class="text-sm text-red-500 mb-4">تأكد انو ملف <b>data.json</b> موجود يَم ملف الـ HTML، ودا تشغل الموقع على خادم محلي (Localhost).</p>
                     </div>`;
             }
         }
 
-        // ================= 3. رسم الواجهة (مُعدّل لزر المشاهدة) =================
+        // ================= 3. رسم الواجهة (تم تعديل المسافات) =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
             // نحذف رسالة "جاري التحميل" إذا كانت موجودة
@@ -251,7 +252,8 @@
 
             allData.forEach((teacher, index) => {
                 const teacherCard = document.createElement('div');
-                teacherCard.className = 'bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-enter mb-5 mx-4';
+                // تم تعديل الهامش الأفقي للبطاقة
+                teacherCard.className = 'bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-100 animate-enter mb-5 mx-2 sm:mx-4'; 
                 teacherCard.style.animationDelay = `${index * 100}ms`;
 
                 let lecturesHtml = '';
@@ -259,23 +261,22 @@
                 teacher.lectures.forEach(lecture => {
                     const isDone = completedLectures.includes(lecture.id);
                     
-                    // تم تعديل زر المشاهدة لاستدعاء دالة openVideoModal
                     lecturesHtml += `
                         <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors group mb-2 last:mb-0">
-                            <div class="flex items-center gap-3 flex-1 cursor-pointer select-none" onclick="toggleComplete(${lecture.id})">
-                                <div class="check-box-wrapper relative">
+                            <div class="flex items-center gap-2 sm:gap-3 flex-1 cursor-pointer select-none min-w-0" onclick="toggleComplete(${lecture.id})">
+                                <div class="check-box-wrapper relative shrink-0">
                                     <input type="checkbox" class="sr-only" ${isDone ? 'checked' : ''}>
                                     <div class="w-6 h-6 border-2 border-slate-300 rounded-lg flex items-center justify-center transition-all duration-300 bg-white shadow-sm group-hover:border-blue-400">
                                         <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all duration-300 stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                                     </div>
                                 </div>
-                                <span class="font-bold text-slate-700 text-sm md:text-base transition-all ${isDone ? 'line-through text-slate-400 opacity-60' : ''}">
+                                <span class="font-bold text-slate-700 text-sm md:text-base transition-all ${isDone ? 'line-through text-slate-400 opacity-60' : ''} truncate">
                                     ${lecture.title}
                                 </span>
                             </div>
 
                             <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}')" 
-                                class="mr-2 bg-blue-50 text-blue-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition flex items-center gap-1 shrink-0 active:scale-95">
+                                class="mr-1 sm:mr-2 bg-blue-50 text-blue-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition flex items-center gap-1 shrink-0 active:scale-95">
                                 <span class="hidden md:inline">افتح الفيديو</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -287,10 +288,10 @@
                 });
 
                 teacherCard.innerHTML = `
-                    <div class="flex items-center gap-4 border-b border-slate-100 pb-4 mb-4 border-dashed">
-                        <img src="${teacher.image}" onerror="this.src='https://ui-avatars.com/api/?name=${teacher.name}'" class="w-14 h-14 rounded-2xl bg-slate-100 shadow-sm object-cover ring-2 ring-white">
+                    <div class="flex items-center gap-3 sm:gap-4 border-b border-slate-100 pb-3 sm:pb-4 mb-3 sm:mb-4 border-dashed">
+                        <img src="${teacher.image}" onerror="this.src='https://ui-avatars.com/api/?name=${teacher.name}'" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-slate-100 shadow-sm object-cover ring-2 ring-white shrink-0">
                         <div>
-                            <h2 class="font-black text-lg text-slate-800">${teacher.name}</h2>
+                            <h2 class="font-black text-base sm:text-lg text-slate-800">${teacher.name}</h2>
                             <span class="text-xs font-bold bg-blue-100 text-blue-700 px-2 py-1 rounded-lg inline-block mt-1">${teacher.subject}</span>
                         </div>
                     </div>
@@ -301,7 +302,7 @@
             });
         }
 
-        // ================= 4. وظيفة تبديل حالة الإكمال (ما تغير) =================
+        // ================= 4. وظيفة تبديل حالة الإكمال =================
         function toggleComplete(id) {
             if (completedLectures.includes(id)) {
                 completedLectures = completedLectures.filter(item => item !== id);
@@ -316,7 +317,7 @@
             updateStats(); 
         }
 
-        // ================= 5. تحديث الإحصائيات (ما تغير) =================
+        // ================= 5. تحديث الإحصائيات =================
         function updateStats() {
             let totalLectures = 0;
             allData.forEach(t => totalLectures += t.lectures.length);
@@ -332,18 +333,18 @@
             const statusBadge = document.getElementById('statusBadge');
             if (percent === 100) {
                 statusBadge.innerText = "أسطورة! 🏆";
-                statusBadge.className = "text-xs text-green-700 font-bold mb-2 bg-green-100 px-2 py-0.5 rounded-full";
+                statusBadge.className = "text-xs text-green-700 font-bold mb-1 sm:mb-2 bg-green-100 px-2 py-0.5 rounded-full";
                 triggerConfetti(1); 
             } else if (percent > 50) {
                 statusBadge.innerText = "فدوة لهل درجات 🔥";
-                statusBadge.className = "text-xs text-orange-700 font-bold mb-2 bg-orange-100 px-2 py-0.5 rounded-full";
+                statusBadge.className = "text-xs text-orange-700 font-bold mb-1 sm:mb-2 bg-orange-100 px-2 py-0.5 rounded-full";
             } else {
                 statusBadge.innerText = "بداية موفقة 💪";
-                statusBadge.className = "text-xs text-blue-700 font-bold mb-2 bg-blue-100 px-2 py-0.5 rounded-full";
+                statusBadge.className = "text-xs text-blue-700 font-bold mb-1 sm:mb-2 bg-blue-100 px-2 py-0.5 rounded-full";
             }
         }
 
-        // ================= وظائف المودال (الجديدة) =================
+        // ================= وظائف المودال =================
 
         function openVideoModal(title, url) {
             const modal = document.getElementById('videoModal');
@@ -352,18 +353,15 @@
             
             modalTitle.innerText = title;
             
-            // إنشاء iframe جديد بالرابط المخصص
             const iframe = document.createElement('iframe');
             iframe.src = url;
             iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
             iframe.allowFullscreen = true;
             iframe.title = title;
             
-            // تنظيف وإضافة المشغل الجديد
             videoContainer.innerHTML = '';
             videoContainer.appendChild(iframe);
 
-            // عرض المودال بتأثير حلو
             modal.classList.remove('hidden', 'opacity-0');
             modal.classList.add('opacity-100');
             modal.querySelector('div:last-child').classList.remove('scale-95');
@@ -373,11 +371,9 @@
             const modal = document.getElementById('videoModal');
             const videoContainer = document.getElementById('videoContainer');
             
-            // إخفاء المودال وتأثيرات الخروج
             modal.classList.add('opacity-0');
             modal.querySelector('div:last-child').classList.add('scale-95');
             
-            // إزالة الـ iframe لإيقاف الفيديو
             setTimeout(() => {
                 modal.classList.add('hidden');
                 videoContainer.innerHTML = '';
@@ -385,7 +381,7 @@
         }
 
 
-        // ================= وظائف مساعدة (ما تغير) =================
+        // ================= وظائف مساعدة =================
         function setGreeting() {
             const hour = new Date().getHours();
             const greeting = hour < 12 ? "صباح الخير، حميد ☀️" : "مساء الخير، حميد 🌙";
