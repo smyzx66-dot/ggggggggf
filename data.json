@@ -2,12 +2,12 @@
   "teachers": [
     {
       "id": 3,
-      "name": "أ. حيدر وليد",
+      "name": " 2026 أ. حيدر وليد",
       "subject": "الرياضيات",
       "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
       "classes": [
         {
-          "name": "الفصل الثالث: تطبيقات التفاضل",
+          "name": " 2026 الفصل الثالث: تطبيقات التفاضل",
           "lectures": [
             {
               "title": "المحاضرة 1",
