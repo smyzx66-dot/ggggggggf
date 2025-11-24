@@ -24,7 +24,7 @@
         }
         .animate-enter { animation: fade-in-up 0.5s ease-out forwards; }
         
-        /* تخصيص شريط التمرير (مخفي في الموبايل لجمالية أكثر) */
+        /* تخصيص شريط التمرير */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -168,6 +168,16 @@
     </div>
     
     <script>
+        // ================= قائمة الألوان المريحة (36 لون) =================
+        const lectureColors = [
+            "#F1F5F9", "#FFF1F2", "#FFF7ED", "#FEFCE8", "#F0FDF4", "#EFF6FF", 
+            "#FAF5FF", "#FDF4FF", "#FDF2F8", "#ECFEFF", "#F0F9FF", "#E0F2FE",
+            "#DBEAFE", "#E0E7FF", "#EDE9FE", "#FAE8FF", "#FCE7F3", "#FFE4E6",
+            "#FEE2E2", "#FFEDD5", "#FEF3C7", "#FCF6B0", "#D9F99D", "#BBF7D0",
+            "#DCFCE7", "#D1FAE5", "#CCFBF1", "#CFFAFE", "#E0F2F1", "#E8F5E9",
+            "#F3E5F5", "#FCE4EC", "#FFEBEE", "#EFEBE9", "#FAFAFA", "#ECEFF1"
+        ];
+
         // ================= المتغيرات =================
         const PASSWORD = "123";
         let allData = [];
@@ -204,10 +214,9 @@
             location.reload();
         }
 
-        // ================= جلب البيانات (تم تعديل هذا الجزء) =================
+        // ================= جلب البيانات =================
         async function loadData() {
             try {
-                // دمج بيانات المعلم "أ. حيدر وليد" مباشرة في الكود
                 const dataFromBackend = {
                     "teachers": [
                         {
@@ -217,68 +226,18 @@
                             "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
                             "classes": [
                                 {
-                                    "name": "الفصل الثالث: تطبيقات التفاضل",
+                                    "name": "الفصل الثالث",
                                     "lectures": [
-                                        {
-                                            "id": 301,
-                                            "title": "المحاضرة 1",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4",
-                                            "description": "المحاضرة الأولى من الفصل الثالث."
-                                        },
-                                        {
-                                            "id": 302,
-                                            "title": "المحاضرة 2",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d",
-                                            "description": "المحاضرة الثانية من الفصل الثالث."
-                                        },
-                                        {
-                                            "id": 303,
-                                            "title": "المحاضرة 3 - الجزء الأول",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e",
-                                            "description": "المحاضرة الثالثة، الجزء الأول."
-                                        },
-                                        {
-                                            "id": 304,
-                                            "title": "المحاضرة 3 - الجزء الثاني",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9",
-                                            "description": "المحاضرة الثالثة، الجزء الثاني."
-                                        },
-                                        {
-                                            "id": 305,
-                                            "title": "المحاضرة 4 - الجزء الأول",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
-                                            "description": "المحاضرة الرابعة، الجزء الأول."
-                                        },
-                                        {
-                                            "id": 306,
-                                            "title": "المحاضرة 4 - الجزء الثاني",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
-                                            "description": "المحاضرة الرابعة، الجزء الثاني."
-                                        },
-                                        {
-                                            "id": 307,
-                                            "title": "المحاضرة 5",
-                                            "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274",
-                                            "description": "المحاضرة الخامسة من الفصل الثالث."
-                                        },
-                                        {
-                                            "id": 308,
-                                            "title": "المحاضرة 6",
-                                            "url": "#",
-                                            "description": "المحاضرة السادسة من الفصل الثالث."
-                                        },
-                                        {
-                                            "id": 309,
-                                            "title": "المحاضرة 7",
-                                            "url": "#",
-                                            "description": "المحاضرة السابعة من الفصل الثالث."
-                                        },
-                                        {
-                                            "id": 310,
-                                            "title": "المحاضرة 8",
-                                            "url": "#",
-                                            "description": "المحاضرة الثامنة من الفصل الثالث."
-                                        }
+                                        { "id": 301, "title": "المحاضرة 1", "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4", "description": "" },
+                                        { "id": 302, "title": "المحاضرة 2", "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d", "description": "" },
+                                        { "id": 303, "title": "المحاضرة 3 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e", "description": "" },
+                                        { "id": 304, "title": "المحاضرة 3 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9", "description": "" },
+                                        { "id": 305, "title": "المحاضرة 4 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815", "description": "" },
+                                        { "id": 306, "title": "المحاضرة 4 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815", "description": "" },
+                                        { "id": 307, "title": "المحاضرة 5", "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274", "description": "" },
+                                        { "id": 308, "title": "المحاضرة 6", "url": "#", "description": "" },
+                                        { "id": 309, "title": "المحاضرة 7", "url": "#", "description": "" },
+                                        { "id": 310, "title": "المحاضرة 8", "url": "#", "description": "" }
                                     ]
                                 }
                             ]
@@ -286,15 +245,10 @@
                     ]
                 };
 
-                // تحويل البيانات من الهيكل الجديد إلى الهيكل المتوقع من renderApp 
-                // (دمج جميع المحاضرات من جميع الـ classes في قائمة واحدة لكل معلم)
                 allData = dataFromBackend.teachers.map(teacher => {
                     let allLectures = [];
-                    // دمج جميع محاضرات الفصول في قائمة واحدة 'lectures' للمعلم 
-                    // (للتوافق مع طريقة معالجة البيانات في دالة renderApp الأصلية)
                     teacher.classes.forEach(cls => {
                         cls.lectures.forEach(lecture => {
-                            // إضافة اسم الفصل كبادئة لعنوان المحاضرة لتميزها
                             const fullTitle = `${cls.name}: ${lecture.title}`;
                             allLectures.push({
                                 id: lecture.id,
@@ -309,7 +263,7 @@
                         name: teacher.name,
                         subject: teacher.subject,
                         image: teacher.image,
-                        lectures: allLectures // هذه القائمة يستخدمها renderApp
+                        lectures: allLectures
                     };
                 });
                 
@@ -320,12 +274,10 @@
                 console.error("Error loading data:", error);
             }
         }
-        // ================= نهاية تعديل loadData =================
 
         // ================= رسم الواجهة =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
-            // احتفظ بـ دافع قرآني إذا كان موجوداً، أو أضفه
             const QuranicMotive = `
             <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 shadow-sm mx-1 mb-4">
                 <h3 class="flex items-center gap-2 font-black text-sm text-amber-800 mb-2">
@@ -352,27 +304,29 @@
 
                 let lecturesHtml = '';
                 
-                teacher.lectures.forEach(lecture => {
+                teacher.lectures.forEach((lecture, lIndx) => {
                     const isDone = completedLectures.includes(lecture.id);
+                    // اختيار لون من القائمة بناءً على ترتيب المحاضرة
+                    const cardColor = lectureColors[lIndx % lectureColors.length];
                     
                     lecturesHtml += `
-                        <div class="flex items-center justify-between p-2 sm:p-3 rounded-xl hover:bg-slate-50 transition-colors group mb-2 last:mb-0 border border-transparent hover:border-slate-100">
+                        <div style="background-color: ${cardColor};" class="flex items-center justify-between p-3 sm:p-4 rounded-xl mb-3 last:mb-0 border border-slate-100/50 shadow-sm transition-transform active:scale-[0.99]">
                             <div class="flex items-center gap-3 flex-1 cursor-pointer select-none min-w-0" onclick="toggleComplete(${lecture.id})">
                                 <div class="check-box-wrapper relative shrink-0">
                                     <input type="checkbox" class="sr-only" ${isDone ? 'checked' : ''}>
-                                    <div class="w-6 h-6 border-2 border-slate-200 rounded-lg flex items-center justify-center transition-all duration-300 bg-white shadow-sm group-hover:border-blue-400">
+                                    <div class="w-6 h-6 border-2 border-slate-300 rounded-lg flex items-center justify-center transition-all duration-300 bg-white shadow-sm group-hover:border-blue-400">
                                         <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all duration-300 stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                                     </div>
                                 </div>
-                                <span class="font-bold text-slate-700 text-xs sm:text-sm leading-relaxed transition-all ${isDone ? 'line-through text-slate-400 opacity-60' : ''}">
+                                <span class="font-bold text-slate-800 text-base sm:text-lg leading-relaxed transition-all ${isDone ? 'line-through text-slate-400 opacity-60' : ''}">
                                     ${lecture.title}
                                 </span>
                             </div>
 
                             <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}')" 
-                                class="mr-2 ${lecture.url === '#' ? 'bg-slate-50 text-slate-400 cursor-default' : 'bg-blue-50 text-blue-600 hover:bg-blue-100 active:scale-95' } w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shrink-0">
-                                <span class="hidden sm:inline">${lecture.url === '#' ? 'لا يوجد رابط' : 'مشاهدة'}</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                class="mr-2 ${lecture.url === '#' ? 'bg-white/50 text-slate-400 cursor-default' : 'bg-white text-blue-600 shadow-sm hover:shadow-md active:scale-95' } w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shrink-0">
+                                <span class="hidden sm:inline">${lecture.url === '#' ? 'لا يوجد' : 'مشاهدة'}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -382,14 +336,15 @@
                 });
 
                 teacherCard.innerHTML = `
-                    <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-3 border-dashed">
-                        <img src="${teacher.image}" onerror="this.src='https://ui-avatars.com/api/?name=${teacher.name}&background=random'" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-100 shadow-sm object-cover ring-2 ring-white shrink-0">
+                    <div class="flex items-center gap-4 border-b border-slate-100 pb-4 mb-4 border-dashed">
+                        <img src="${teacher.image}" onerror="this.src='https://ui-avatars.com/api/?name=${teacher.name}&background=random'" 
+                             class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-100 shadow-md object-cover ring-4 ring-white shrink-0">
                         <div>
-                            <h2 class="font-black text-sm sm:text-base text-slate-800">${teacher.name}</h2>
-                            <span class="text-[10px] sm:text-xs font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md inline-block mt-0.5">${teacher.subject}</span>
+                            <h2 class="font-black text-xl sm:text-2xl text-slate-800 mb-1">${teacher.name}</h2>
+                            <span class="text-xs sm:text-sm font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-lg inline-block">${teacher.subject}</span>
                         </div>
                     </div>
-                    <div class="space-y-1">${lecturesHtml}</div>
+                    <div class="space-y-2">${lecturesHtml}</div>
                 `;
 
                 container.appendChild(teacherCard);
@@ -412,7 +367,6 @@
 
         function updateStats() {
             let totalLectures = 0;
-            // يجب أن نستخدم allData المجهز الآن
             allData.forEach(t => totalLectures += t.lectures.length);
             
             const completedCount = completedLectures.length;
@@ -493,7 +447,7 @@
             canvas.height = window.innerHeight;
             
             const particles = [];
-            const particleCount = 50 * intensity; // Reduced count for mobile performance
+            const particleCount = 50 * intensity; 
             
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
