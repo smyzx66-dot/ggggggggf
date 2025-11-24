@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة حميد التعليمية - النسخة المطورة</title>
+    <title>منصة حميد التعليمية - النسخة المطورة (بالعراقي)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
@@ -37,10 +37,33 @@
         }
         .check-box-wrapper input:checked + div svg { stroke-dashoffset: 0; }
         
+        /* مشغل الفيديو المتجاوب (YouTube Style) */
+        .video-responsive {
+            position: relative;
+            width: 100%;
+            /* نسبة 16:9 */
+            padding-top: 56.25%; 
+        }
+
+        .video-responsive iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 1rem;
+        }
+
         /* Confetti Canvas */
         #confetti-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             pointer-events: none; z-index: 100;
+        }
+
+        /* Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.9);
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -53,27 +76,27 @@
         
         <div class="relative bg-white/10 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-sm text-center border border-white/20 animate-enter">
             <div class="w-24 h-24 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl shadow-lg ring-4 ring-white/20">
-                👨‍🎓
+                📚
             </div>
             <h1 class="text-3xl font-extrabold text-white mb-2 tracking-wide">منصة حميد</h1>
-            <p class="text-blue-200 mb-8 font-medium text-sm">بوابتك للتميز الأكاديمي</p>
+            <p class="text-blue-200 mb-8 font-medium text-sm">بوابتك للنجاح والدرجات العالية</p>
             
             <div class="space-y-4">
                 <div class="relative group">
-                    <input type="password" id="passwordInput" placeholder="كلمة المرور (123)" 
+                    <input type="password" id="passwordInput" placeholder="الرمز السري (123)" 
                         class="w-full p-4 pl-12 bg-white/90 rounded-2xl border-2 border-transparent focus:border-cyan-400 focus:bg-white outline-none transition text-center text-lg placeholder-slate-400 text-slate-800 shadow-inner">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔒</span>
                 </div>
                 
                 <button onclick="checkLogin()" 
                     class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold py-4 rounded-2xl shadow-lg shadow-blue-500/30 transition transform active:scale-95 text-lg flex items-center justify-center gap-2 group">
-                    <span>تسجيل الدخول</span>
+                    <span>دخول للتطبيق</span>
                     <svg class="w-5 h-5 group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14"></path></svg>
                 </button>
             </div>
-            <p id="errorMsg" class="text-rose-400 mt-4 text-sm font-bold hidden transition-opacity bg-white/10 py-2 rounded-lg">⚠️ كلمة المرور غير صحيحة</p>
+            <p id="errorMsg" class="text-rose-400 mt-4 text-sm font-bold hidden transition-opacity bg-white/10 py-2 rounded-lg">⚠️ الرمز السري غلط، حاول مرة ثانية</p>
         </div>
-        <p class="relative text-white/40 text-xs mt-8 font-light">الإصدار 3.0</p>
+        <p class="relative text-white/40 text-xs mt-8 font-light">إصدار 3.0</p>
     </div>
 
     <div id="appScreen" class="hidden h-full flex flex-col relative">
@@ -85,8 +108,8 @@
             <div class="relative flex justify-between items-start mb-6">
                 <div>
                     <p class="text-cyan-300 text-sm font-bold mb-1" id="dateDisplay">--/--/----</p>
-                    <h1 class="text-3xl font-black mb-1" id="greetingMsg">أهلاً، حميد</h1>
-                    <p class="text-blue-200 text-xs opacity-80">جاهز لتحقيق أهدافك اليوم؟ 🚀</p>
+                    <h1 class="text-3xl font-black mb-1" id="greetingMsg">يا هلا بحميد 👋</h1>
+                    <p class="text-blue-200 text-xs opacity-80">مستعد تبدع اليوم؟ 🚀</p>
                 </div>
                 <button onclick="logout()" class="bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-2xl text-white transition border border-white/10 shadow-lg group">
                     <svg class="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -99,12 +122,12 @@
                         <span class="block text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">نسبة الإنجاز</span>
                         <div class="flex items-end gap-2">
                             <span class="text-4xl font-black text-slate-800" id="percentage">0%</span>
-                            <span class="text-xs text-green-500 font-bold mb-2 bg-green-50 px-2 py-0.5 rounded-full" id="statusBadge">جيد 👍</span>
+                            <span class="text-xs text-green-500 font-bold mb-2 bg-green-50 px-2 py-0.5 rounded-full" id="statusBadge">زين عاشت إيدك 👍</span>
                         </div>
                     </div>
                     
                     <div class="text-left">
-                        <div class="text-xs text-slate-400 font-bold mb-1">المهام المكتملة</div>
+                        <div class="text-xs text-slate-400 font-bold mb-1">الدروس المخلصة</div>
                         <div class="text-xl font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-xl inline-block">
                             <span id="statsCount">0</span>
                             <span class="text-slate-300 mx-1">/</span>
@@ -116,34 +139,61 @@
         </header>
 
         <main class="flex-1 overflow-y-auto px-4 pt-16 pb-24 space-y-5 scroll-smooth" id="teachersContainer">
-            <div class="text-center py-10 text-gray-400 animate-pulse">جاري تحميل البيانات...</div>
+            
+            <div class="bg-amber-50 border-amber-200 border-2 rounded-3xl p-5 shadow-inner mx-4">
+                <h3 class="flex items-center gap-2 font-black text-lg text-amber-800 mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+                    دافع إلك من القرآن
+                </h3>
+                <blockquote class="text-sm font-medium text-amber-700 leading-relaxed border-r-4 border-amber-500 pr-3">
+                    "وَقُل رَّبِّ زِدْنِي عِلْمًا" 
+                    <footer class="text-xs text-amber-500 mt-2 block">سورة طه - الآية 114</footer>
+                </blockquote>
+            </div>
+
+            <div class="text-center py-10 text-gray-400 animate-pulse">جاري تحميل البيانات... دقيقة..</div>
         </main>
     </div>
 
+    <div id="videoModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden modal-backdrop opacity-0 transition-opacity duration-300" onclick="closeVideoModal()">
+        
+        <div class="bg-white rounded-2xl w-full max-w-4xl p-4 shadow-2xl transform scale-95 transition-transform duration-300" onclick="event.stopPropagation()">
+            
+            <div class="flex justify-between items-start mb-4">
+                <h2 class="text-xl font-black text-slate-800" id="modalTitle">عنوان المحاضرة</h2>
+                <button onclick="closeVideoModal()" class="text-slate-400 hover:text-slate-600 transition p-2 -m-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            
+            <div class="video-responsive bg-slate-800 rounded-xl shadow-lg">
+                <div id="videoContainer"></div>
+            </div>
+
+            <p class="text-sm text-slate-500 mt-4">تقدر تشوف الفيديو بكل راحة من موبايلك أو التابلت.</p>
+        </div>
+    </div>
+    
     <script>
         // ================= المتغيرات العامة =================
         const PASSWORD = "123";
         let allData = [];
-        // قراءة المصفوفة التي تحتوي فقط على أرقام المحاضرات المكتملة
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
 
-        // ================= 1. التحقق من تسجيل الدخول =================
+        // ================= 1. التحقق من تسجيل الدخول (ما تغير) =================
         function checkLogin() {
             const input = document.getElementById('passwordInput').value;
             const error = document.getElementById('errorMsg');
             
             if (input === PASSWORD) {
-                // حفظ حالة الدخول
                 localStorage.setItem('hameedApp_isLoggedIn', 'true');
-                
-                // أنيميشن خروج
                 const loginScreen = document.getElementById('loginScreen');
                 loginScreen.classList.add('opacity-0', 'pointer-events-none');
                 
                 setTimeout(() => {
                     loginScreen.classList.add('hidden');
                     document.getElementById('appScreen').classList.remove('hidden');
-                    loadData(); // بدء تحميل البيانات
+                    loadData(); 
                 }, 500);
             } else {
                 error.classList.remove('hidden');
@@ -159,14 +209,14 @@
             location.reload();
         }
 
-        // ================= 2. جلب البيانات وعرضها (تمت إعادتها إلى الأصل) =================
+        // ================= 2. جلب البيانات وعرضها (يرجع لملف data.json) =================
         async function loadData() {
             try {
-                // جلب البيانات من ملف JSON خارجي: يجب أن يكون ملف data.json موجوداً في نفس المجلد
+                // لازم يكون ملف data.json موجود بصفحة الـ HTML
                 const response = await fetch('data.json');
                 
                 if (!response.ok) {
-                    throw new Error('فشل الاتصال بالملف');
+                    throw new Error('فشل بالاتصال بملف البيانات');
                 }
 
                 allData = await response.json();
@@ -175,34 +225,33 @@
                 updateStats();
                 setGreeting();
             } catch (error) {
-                console.error("Error loading data:", error);
+                console.error("مشكلة بتحميل البيانات:", error);
                 document.getElementById('teachersContainer').innerHTML = 
                     `<div class="text-center p-6 bg-red-50 rounded-3xl mx-4">
-                        <div class="text-4xl mb-2">⚠️</div>
-                        <h3 class="font-bold text-red-600 mb-2">فشل تحميل البيانات</h3>
-                        <p class="text-sm text-red-500 mb-4">تأكد من وجود ملف <b>data.json</b> بجانب ملف HTML، وتشغيل الموقع عبر خادم محلي (Localhost).</p>
+                        <div class="text-4xl mb-2">😭</div>
+                        <h3 class="font-bold text-red-600 mb-2">فشلت عملية تحميل البيانات</h3>
+                        <p class="text-sm text-red-500 mb-4">تأكد انو ملف <b>data.json</b> موجود يَم ملف الـ HTML، ودا تشغل الموقع على خادم محلي (Localhost). </p>
                     </div>`;
             }
         }
 
-        // ================= 3. رسم الواجهة (لم يتغير) =================
+        // ================= 3. رسم الواجهة (مُعدّل لزر المشاهدة) =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
-            container.innerHTML = '';
+            // نحذف رسالة "جاري التحميل" إذا كانت موجودة
+            if(allData.length > 0) container.innerHTML = '';
             
-            // حساب المجموع الكلي للمحاضرات
             let totalLectures = 0;
             allData.forEach(t => totalLectures += t.lectures.length);
             
             if (totalLectures === 0 && allData.length > 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-10">لا توجد محاضرات في ملف البيانات حالياً.</p>';
+                container.innerHTML += '<p class="text-center text-gray-500 py-10">ماكو محاضرات بالملف حالياً.</p>';
                 return;
             }
 
             allData.forEach((teacher, index) => {
-                // إنشاء كارت المدرس بستايل حديث
                 const teacherCard = document.createElement('div');
-                teacherCard.className = 'bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-enter mb-5';
+                teacherCard.className = 'bg-white rounded-3xl p-5 shadow-sm border border-slate-100 animate-enter mb-5 mx-4';
                 teacherCard.style.animationDelay = `${index * 100}ms`;
 
                 let lecturesHtml = '';
@@ -210,6 +259,7 @@
                 teacher.lectures.forEach(lecture => {
                     const isDone = completedLectures.includes(lecture.id);
                     
+                    // تم تعديل زر المشاهدة لاستدعاء دالة openVideoModal
                     lecturesHtml += `
                         <div class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors group mb-2 last:mb-0">
                             <div class="flex items-center gap-3 flex-1 cursor-pointer select-none" onclick="toggleComplete(${lecture.id})">
@@ -224,13 +274,14 @@
                                 </span>
                             </div>
 
-                            <a href="${lecture.url}" target="_blank" class="mr-2 bg-blue-50 text-blue-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition flex items-center gap-1 shrink-0">
-                                <span class="hidden md:inline">شاهد</span>
+                            <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}')" 
+                                class="mr-2 bg-blue-50 text-blue-600 px-3 py-2 rounded-xl text-xs font-bold hover:bg-blue-100 transition flex items-center gap-1 shrink-0 active:scale-95">
+                                <span class="hidden md:inline">افتح الفيديو</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                            </a>
+                            </button>
                         </div>
                     `;
                 });
@@ -250,23 +301,22 @@
             });
         }
 
-        // ================= 4. وظيفة تبديل حالة الإكمال =================
+        // ================= 4. وظيفة تبديل حالة الإكمال (ما تغير) =================
         function toggleComplete(id) {
             if (completedLectures.includes(id)) {
                 completedLectures = completedLectures.filter(item => item !== id);
             } else {
                 completedLectures.push(id);
-                triggerConfetti(0.2); // احتفال صغير
+                triggerConfetti(0.2); 
             }
             
-            // حفظ في المتصفح
             localStorage.setItem('hameed_completed', JSON.stringify(completedLectures));
             
-            renderApp(); // إعادة رسم الواجهة
-            updateStats(); // تحديث الأرقام
+            renderApp(); 
+            updateStats(); 
         }
 
-        // ================= 5. تحديث الإحصائيات =================
+        // ================= 5. تحديث الإحصائيات (ما تغير) =================
         function updateStats() {
             let totalLectures = 0;
             allData.forEach(t => totalLectures += t.lectures.length);
@@ -274,20 +324,18 @@
             const completedCount = completedLectures.length;
             const percent = totalLectures === 0 ? 0 : Math.round((completedCount / totalLectures) * 100);
 
-            // Animate Numbers
             animateValue("statsCount", parseInt(document.getElementById("statsCount").innerText), completedCount, 500);
             document.getElementById('statsTotal').innerText = totalLectures;
             
             animateValue("percentage", parseInt(document.getElementById("percentage").innerText), percent, 500, "%");
 
-            // تحديث حالة الشارة
             const statusBadge = document.getElementById('statusBadge');
             if (percent === 100) {
                 statusBadge.innerText = "أسطورة! 🏆";
                 statusBadge.className = "text-xs text-green-700 font-bold mb-2 bg-green-100 px-2 py-0.5 rounded-full";
-                triggerConfetti(1); // احتفال كبير
+                triggerConfetti(1); 
             } else if (percent > 50) {
-                statusBadge.innerText = "رائع 🔥";
+                statusBadge.innerText = "فدوة لهل درجات 🔥";
                 statusBadge.className = "text-xs text-orange-700 font-bold mb-2 bg-orange-100 px-2 py-0.5 rounded-full";
             } else {
                 statusBadge.innerText = "بداية موفقة 💪";
@@ -295,7 +343,49 @@
             }
         }
 
-        // ================= وظائف مساعدة =================
+        // ================= وظائف المودال (الجديدة) =================
+
+        function openVideoModal(title, url) {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.innerText = title;
+            
+            // إنشاء iframe جديد بالرابط المخصص
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+            iframe.title = title;
+            
+            // تنظيف وإضافة المشغل الجديد
+            videoContainer.innerHTML = '';
+            videoContainer.appendChild(iframe);
+
+            // عرض المودال بتأثير حلو
+            modal.classList.remove('hidden', 'opacity-0');
+            modal.classList.add('opacity-100');
+            modal.querySelector('div:last-child').classList.remove('scale-95');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            // إخفاء المودال وتأثيرات الخروج
+            modal.classList.add('opacity-0');
+            modal.querySelector('div:last-child').classList.add('scale-95');
+            
+            // إزالة الـ iframe لإيقاف الفيديو
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                videoContainer.innerHTML = '';
+            }, 300);
+        }
+
+
+        // ================= وظائف مساعدة (ما تغير) =================
         function setGreeting() {
             const hour = new Date().getHours();
             const greeting = hour < 12 ? "صباح الخير، حميد ☀️" : "مساء الخير، حميد 🌙";
@@ -364,7 +454,6 @@
 
         // ================= التهيئة =================
         document.addEventListener('DOMContentLoaded', () => {
-            // التحقق التلقائي عند التحميل
             if (localStorage.getItem('hameedApp_isLoggedIn') === 'true') {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appScreen').classList.remove('hidden');
@@ -372,7 +461,6 @@
             }
         });
 
-        // دعم زر Enter
         document.getElementById('passwordInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') checkLogin();
         });
