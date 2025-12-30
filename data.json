@@ -9,56 +9,30 @@
         {
           "name": "الفصل الثالث",
           "lectures": [
-            {
-              "title": "محاضرة رقم 1",
-              "url": "https://iframe.mediadelivery.net/embed/572295/7edeaae1-588c-41db-b5f3-9488fffdf591",
-              "description": "المحاضرة الأولى من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 2",
-              "url": "https://iframe.mediadelivery.net/embed/572295/d98ec6a8-5689-4ad8-aeb0-35b1299eecd6",
-              "description": "المحاضرة الثانية من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 3",
-              "url": "https://iframe.mediadelivery.net/embed/572295/376b2396-0ee4-43d5-8f73-b83eda0cb058",
-              "description": "المحاضرة الثالثة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 4",
-              "url": "https://iframe.mediadelivery.net/embed/572295/4d931048-57ba-4ecd-b26c-cf1fd86567da",
-              "description": "المحاضرة الرابعة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 5",
-              "url": "https://iframe.mediadelivery.net/embed/572295/e9a2c270-6d91-44f7-a645-c3722ad75044",
-              "description": "المحاضرة الخامسة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 6",
-              "url": "https://iframe.mediadelivery.net/embed/572295/e462b3d1-82a6-49fe-b6a1-7cb15de1d9c1",
-              "description": "المحاضرة السادسة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 7",
-              "url": "https://iframe.mediadelivery.net/embed/572295/53d9f6a5-2371-4e99-8866-14ea4325ca7c",
-              "description": "المحاضرة السابعة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 8",
-              "url": "https://iframe.mediadelivery.net/embed/572295/f447daa0-d7ff-48e5-b9ef-531ce8ab1d31",
-              "description": "المحاضرة الثامنة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 9",
-              "url": "https://iframe.mediadelivery.net/embed/572295/6a8a9b50-36e3-47c5-8c17-5654806b6646",
-              "description": "المحاضرة التاسعة من الفصل الثالث."
-            },
-            {
-              "title": "محاضرة رقم 10",
-              "url": "https://iframe.mediadelivery.net/embed/572295/833b4564-5357-4d14-8bce-62306517b7bf",
-              "description": "المحاضرة العاشرة من الفصل الثالث."
-            }
+            { "title": "محاضرة رقم 1", "url": "https://iframe.mediadelivery.net/embed/572295/7edeaae1-588c-41db-b5f3-9488fffdf591", "description": "المحاضرة 1" },
+            { "title": "محاضرة رقم 2", "url": "https://iframe.mediadelivery.net/embed/572295/d98ec6a8-5689-4ad8-aeb0-35b1299eecd6", "description": "المحاضرة 2" },
+            { "title": "محاضرة رقم 3", "url": "https://iframe.mediadelivery.net/embed/572295/376b2396-0ee4-43d5-8f73-b83eda0cb058", "description": "المحاضرة 3" },
+            { "title": "محاضرة رقم 4", "url": "https://iframe.mediadelivery.net/embed/572295/4d931048-57ba-4ecd-b26c-cf1fd86567da", "description": "المحاضرة 4" },
+            { "title": "محاضرة رقم 5", "url": "https://iframe.mediadelivery.net/embed/572295/e9a2c270-6d91-44f7-a645-c3722ad75044", "description": "المحاضرة 5" },
+            { "title": "محاضرة رقم 6", "url": "https://iframe.mediadelivery.net/embed/572295/e462b3d1-82a6-49fe-b6a1-7cb15de1d9c1", "description": "المحاضرة 6" },
+            { "title": "محاضرة رقم 7", "url": "https://iframe.mediadelivery.net/embed/572295/53d9f6a5-2371-4e99-8866-14ea4325ca7c", "description": "المحاضرة 7" },
+            { "title": "محاضرة رقم 8", "url": "https://iframe.mediadelivery.net/embed/572295/f447daa0-d7ff-48e5-b9ef-531ce8ab1d31", "description": "المحاضرة 8" },
+            { "title": "محاضرة رقم 9", "url": "https://iframe.mediadelivery.net/embed/572295/6a8a9b50-36e3-47c5-8c17-5654806b6646", "description": "المحاضرة 9" },
+            { "title": "محاضرة رقم 10", "url": "https://iframe.mediadelivery.net/embed/572295/833b4564-5357-4d14-8bce-62306517b7bf", "description": "المحاضرة 10" },
+            { "title": "محاضرة رقم 11", "url": "https://iframe.mediadelivery.net/embed/572295/038d1cfe-7bda-435a-9b32-b396bf985604", "description": "المحاضرة 11" },
+            { "title": "محاضرة رقم 12", "url": "https://iframe.mediadelivery.net/embed/572295/e2ab033b-80ad-4946-b805-98bb88be6d67", "description": "المحاضرة 12" },
+            { "title": "محاضرة رقم 13", "url": "https://iframe.mediadelivery.net/embed/572295/8fe23732-7909-4652-b05e-fe288809ed6c", "description": "المحاضرة 13" },
+            { "title": "محاضرة رقم 14", "url": "https://iframe.mediadelivery.net/embed/572295/b39d0228-d80a-47c6-acc0-fffcb6b41caf", "description": "المحاضرة 14" },
+            { "title": "محاضرة رقم 15", "url": "https://iframe.mediadelivery.net/embed/572295/46c997b1-258a-4bb0-9b2f-570643ffea9f", "description": "المحاضرة 15" },
+            { "title": "محاضرة رقم 16", "url": "https://iframe.mediadelivery.net/embed/572295/70a98ab9-f131-4e27-ae27-4bb89b9891d9", "description": "المحاضرة 16" },
+            { "title": "محاضرة رقم 17", "url": "https://iframe.mediadelivery.net/embed/572295/ffbd5c2d-bd15-4ea1-8ac1-230e6a0db054", "description": "المحاضرة 17" },
+            { "title": "محاضرة رقم 18", "url": "https://iframe.mediadelivery.net/embed/572295/d639fa54-82cb-4539-bed5-5256f7d8935b", "description": "المحاضرة 18" },
+            { "title": "محاضرة رقم 19", "url": "https://iframe.mediadelivery.net/embed/572295/5873cedb-2903-4cda-85d6-1c182d429149", "description": "المحاضرة 19" },
+            { "title": "محاضرة رقم 20", "url": "https://iframe.mediadelivery.net/embed/572295/fb1891a0-095b-440e-9c82-1cf39f92055e", "description": "المحاضرة 20" },
+            { "title": "محاضرة رقم 21", "url": "https://iframe.mediadelivery.net/embed/572295/fdcdc9ff-24e8-4bd5-8c08-737dbd2af0cf", "description": "المحاضرة 21" },
+            { "title": "محاضرة رقم 22", "url": "https://iframe.mediadelivery.net/embed/572295/bf0ef35b-1db4-44db-89d0-fc4528cbb9ed", "description": "المحاضرة 22" },
+            { "title": "محاضرة رقم 23", "url": "https://iframe.mediadelivery.net/embed/572295/5c65f0c5-760f-46cb-add4-5d015e1889a1", "description": "المحاضرة 23" },
+            { "title": "محاضرة رقم 24", "url": "https://iframe.mediadelivery.net/embed/572295/6a8aa6df-d59c-4bb5-aeff-07d9d5834a8c", "description": "المحاضرة 24" }
           ]
         }
       ]
