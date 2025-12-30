@@ -2,62 +2,62 @@
   "teachers": [
     {
       "id": 3,
-      "name": " 2026 أ. حيدر وليد",
+      "name": "أ. حسين الهاشمي",
       "subject": "الرياضيات",
-      "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
+      "image": "https://i.ibb.co/fz945qC8/IMG-20251230-203201-805.jpg",
       "classes": [
         {
-          "name": " 2026 الفصل الثالث: تطبيقات التفاضل",
+          "name": "الفصل الثالث",
           "lectures": [
             {
-              "title": "المحاضرة 1",
-              "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4",
+              "title": "محاضرة رقم 1",
+              "url": "https://iframe.mediadelivery.net/embed/572295/7edeaae1-588c-41db-b5f3-9488fffdf591",
               "description": "المحاضرة الأولى من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 2",
-              "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d",
+              "title": "محاضرة رقم 2",
+              "url": "https://iframe.mediadelivery.net/embed/572295/d98ec6a8-5689-4ad8-aeb0-35b1299eecd6",
               "description": "المحاضرة الثانية من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 3 - الجزء الأول",
-              "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e",
-              "description": "المحاضرة الثالثة، الجزء الأول."
+              "title": "محاضرة رقم 3",
+              "url": "https://iframe.mediadelivery.net/embed/572295/376b2396-0ee4-43d5-8f73-b83eda0cb058",
+              "description": "المحاضرة الثالثة من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 3 - الجزء الثاني",
-              "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9",
-              "description": "المحاضرة الثالثة، الجزء الثاني."
+              "title": "محاضرة رقم 4",
+              "url": "https://iframe.mediadelivery.net/embed/572295/4d931048-57ba-4ecd-b26c-cf1fd86567da",
+              "description": "المحاضرة الرابعة من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 4 - الجزء الأول",
-              "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
-              "description": "المحاضرة الرابعة، الجزء الأول."
-            },
-            {
-              "title": "المحاضرة 4 - الجزء الثاني",
-              "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815",
-              "description": "المحاضرة الرابعة، الجزء الثاني."
-            },
-            {
-              "title": "المحاضرة 5",
-              "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274",
+              "title": "محاضرة رقم 5",
+              "url": "https://iframe.mediadelivery.net/embed/572295/e9a2c270-6d91-44f7-a645-c3722ad75044",
               "description": "المحاضرة الخامسة من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 6",
-              "url": "https://iframe.mediadelivery.net/embed/519756/545e99ad-06c9-4936-ab8b-a038a511b14b",
+              "title": "محاضرة رقم 6",
+              "url": "https://iframe.mediadelivery.net/embed/572295/e462b3d1-82a6-49fe-b6a1-7cb15de1d9c1",
               "description": "المحاضرة السادسة من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 7",
-              "url": "#",
+              "title": "محاضرة رقم 7",
+              "url": "https://iframe.mediadelivery.net/embed/572295/53d9f6a5-2371-4e99-8866-14ea4325ca7c",
               "description": "المحاضرة السابعة من الفصل الثالث."
             },
             {
-              "title": "المحاضرة 8",
-              "url": "#",
+              "title": "محاضرة رقم 8",
+              "url": "https://iframe.mediadelivery.net/embed/572295/f447daa0-d7ff-48e5-b9ef-531ce8ab1d31",
               "description": "المحاضرة الثامنة من الفصل الثالث."
+            },
+            {
+              "title": "محاضرة رقم 9",
+              "url": "https://iframe.mediadelivery.net/embed/572295/6a8a9b50-36e3-47c5-8c17-5654806b6646",
+              "description": "المحاضرة التاسعة من الفصل الثالث."
+            },
+            {
+              "title": "محاضرة رقم 10",
+              "url": "https://iframe.mediadelivery.net/embed/572295/833b4564-5357-4d14-8bce-62306517b7bf",
+              "description": "المحاضرة العاشرة من الفصل الثالث."
             }
           ]
         }
