@@ -1,465 +1,558 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة حميد التعليمية | Pro</title>
+    <title>منصة حميد التعليمية - موبايل</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Tajawal', 'sans-serif'] },
-                    colors: {
-                        brand: {
-                            50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a',
-                        },
-                        dark: { bg: '#0f172a', card: '#1e293b', text: '#f1f5f9' }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'blob': 'blob 7s infinite',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        :root {
+            --primary: #2563eb;
+            --secondary: #10b981;
         }
-        .dark .glass {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background-color: #f8fafc; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* تحسينات الحركة */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-enter { animation: fade-in-up 0.5s ease-out forwards; }
+        
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* Checkbox Custom */
+        .check-box-wrapper input:checked + div {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+        .check-box-wrapper input:checked + div svg { stroke-dashoffset: 0; }
+        
+        /* Responsive Video */
+        .video-responsive {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        }
+        .video-responsive iframe {
+            position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            width: 100%; height: 100%;
+            border-radius: 0.75rem;
         }
 
-        .checkbox-wrapper input:checked + div { background-color: #10b981; border-color: #10b981; }
-        .checkbox-wrapper input:checked + div svg { stroke-dashoffset: 0; }
-        
-        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
-        
-        /* Digital Clock Font Style */
-        .digit-box { font-variant-numeric: tabular-nums; }
+        #confetti-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            pointer-events: none; z-index: 100;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.85);
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Resume Button Pulse Animation */
+        @keyframes soft-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+        .animate-soft-pulse {
+            animation: soft-pulse 2s infinite;
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-800 dark:bg-dark-bg dark:text-gray-100 transition-colors duration-300 h-[100dvh] flex flex-col overflow-hidden selection:bg-brand-500 selection:text-white">
+<body class="text-slate-800 bg-slate-50 h-[100dvh] overflow-hidden selection:bg-blue-200 flex flex-col">
 
     <canvas id="confetti-canvas"></canvas>
-    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] space-y-2 w-[90%] max-w-sm pointer-events-none"></div>
 
-    <div id="loginScreen" class="fixed inset-0 z-[60] flex flex-col items-center justify-center transition-all duration-700">
-        <div class="absolute inset-0 overflow-hidden bg-slate-900">
-            <div class="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-            <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
-        </div>
-
-        <div class="relative glass p-8 rounded-3xl shadow-2xl w-[90%] max-w-sm text-center transform transition-all hover:scale-[1.01]">
-            <div class="w-20 h-20 bg-gradient-to-br from-brand-500 to-cyan-400 rounded-2xl rotate-3 mx-auto mb-6 flex items-center justify-center shadow-lg shadow-brand-500/30">
-                <span class="text-4xl -rotate-3">🎓</span>
+    <div id="loginScreen" class="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[url('https://img.freepik.com/free-vector/gradient-geometric-shapes-dark-background_23-2148433767.jpg')] bg-cover bg-center transition-all duration-700">
+        <div class="absolute inset-0 bg-slate-900/90 backdrop-blur-sm"></div>
+        
+        <div class="relative bg-white/10 backdrop-blur-xl p-6 sm:p-8 rounded-3xl shadow-2xl w-[90%] max-w-sm text-center border border-white/20 animate-enter">
+            <div class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl sm:text-5xl shadow-lg ring-4 ring-white/20">
+                📚
             </div>
-            <h1 class="text-3xl font-black mb-2 dark:text-white">منصة حميد</h1>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mb-8 font-medium">سجل دخول وابدأ رحلة التفوق</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-wide">منصة حميد</h1>
+            <p class="text-blue-200 mb-6 sm:mb-8 font-medium text-xs sm:text-sm">بوابتك للنجاح والدرجات العالية</p>
             
             <div class="space-y-4">
                 <div class="relative group">
                     <input type="password" id="passwordInput" placeholder="الرمز السري (123)" 
-                        class="w-full p-4 pl-12 bg-white/50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition text-center text-lg dir-ltr placeholder:text-slate-400">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition">🔐</span>
+                        class="w-full p-3 sm:p-4 pl-12 bg-white/90 rounded-2xl border-2 border-transparent focus:border-cyan-400 focus:bg-white outline-none transition text-center text-lg placeholder-slate-400 text-slate-800 shadow-inner">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔒</span>
                 </div>
                 
                 <button onclick="checkLogin()" 
-                    class="w-full bg-gradient-to-r from-brand-600 to-cyan-600 hover:from-brand-700 hover:to-cyan-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-500/25 transition transform active:scale-[0.98] flex items-center justify-center gap-2">
-                    <span>دخول للمنصة</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-bold py-3 sm:py-4 rounded-2xl shadow-lg shadow-blue-500/30 transition transform active:scale-95 text-lg flex items-center justify-center gap-2 group">
+                    <span>دخول للتطبيق</span>
+                    <svg class="w-5 h-5 group-hover:-translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14"></path></svg>
                 </button>
             </div>
+            <p id="errorMsg" class="text-rose-300 mt-4 text-sm font-bold hidden transition-opacity bg-red-900/20 py-2 rounded-lg border border-red-500/30">⚠️ الرمز السري غلط!</p>
         </div>
+        <p class="relative text-white/30 text-xs mt-8 font-light">إصدار الهواتف 3.2</p>
     </div>
 
-    <div id="appScreen" class="hidden h-full flex flex-col relative w-full max-w-2xl mx-auto bg-white dark:bg-dark-bg shadow-2xl overflow-hidden transition-colors duration-300">
+    <div id="appScreen" class="hidden h-full flex flex-col relative w-full max-w-md mx-auto sm:max-w-full bg-slate-50 shadow-2xl overflow-hidden">
         
-        <header class="relative bg-white dark:bg-dark-card pt-6 pb-4 px-5 z-20 shrink-0 border-b border-slate-100 dark:border-slate-800 h-auto overflow-y-auto no-scrollbar max-h-[45vh]">
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/30 rounded-full flex items-center justify-center text-xl">👋</div>
-                    <div>
-                        <h1 class="text-xl font-black dark:text-white" id="greetingMsg">هلا والله</h1>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 font-bold" id="dateDisplay">--/--/----</p>
-                    </div>
+        <header class="bg-blue-900 text-white p-5 pb-16 rounded-b-[2.5rem] shadow-xl z-20 relative shrink-0 overflow-visible">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/20 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none"></div>
+
+            <div class="relative flex justify-between items-start mb-2">
+                <div>
+                    <p class="text-cyan-300 text-[10px] sm:text-xs font-bold mb-1 opacity-80" id="dateDisplay">--/--/----</p>
+                    <h1 class="text-2xl sm:text-3xl font-black mb-1" id="greetingMsg">يا هلا 👋</h1>
+                    <p class="text-blue-200 text-xs opacity-80">شد حيلك اليوم! 🚀</p>
                 </div>
-                <div class="flex gap-2">
-                    <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-full bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-yellow-400 flex items-center justify-center transition border border-slate-200 dark:border-slate-700 active:scale-90">
-                        <svg id="moonIcon" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                        <svg id="sunIcon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                    </button>
-                    <button onclick="logout()" class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/20 text-red-500 flex items-center justify-center transition border border-red-100 dark:border-red-900/30 active:scale-90">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    </button>
-                </div>
+                <button onclick="logout()" class="bg-white/10 hover:bg-white/20 backdrop-blur-md p-2.5 rounded-xl text-white transition border border-white/10 shadow-lg active:scale-90">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                </button>
             </div>
 
-            <div class="bg-gradient-to-r from-brand-600 to-blue-500 rounded-2xl p-4 text-white shadow-lg shadow-brand-500/20 relative overflow-hidden mb-4">
-                <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
-                <div class="flex justify-between items-end relative z-10">
-                    <div>
-                        <p class="text-brand-100 text-xs font-medium mb-1">مستوى الإنجاز العام</p>
-                        <h2 class="text-4xl font-black tracking-tight" id="percentage">0%</h2>
+            <div class="absolute left-4 right-4 -bottom-10 z-30">
+                <div class="bg-white p-3 sm:p-4 rounded-2xl shadow-lg border border-slate-100 flex justify-between items-center h-20 sm:h-auto">
+                    
+                    <div class="flex-1 border-l border-slate-100 pl-3 ml-3 flex flex-col justify-center">
+                        <span class="block text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">الإنجاز</span>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-2xl sm:text-4xl font-black text-slate-800 leading-none" id="percentage">0%</span>
+                            <span class="text-[10px] sm:text-xs text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded-full truncate max-w-[100px]" id="statusBadge">عاشت إيدك</span>
+                        </div>
                     </div>
-                    <div class="text-left">
-                        <div class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold mb-1 border border-white/10" id="statusBadge">جيد جداً</div>
-                        <p class="text-brand-100 text-[10px]">
-                            <span id="statsCount" class="font-bold text-white text-base">0</span> / <span id="statsTotal">0</span> محاضرة
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-4 h-2 bg-black/20 rounded-full overflow-hidden">
-                    <div id="progressBar" class="h-full bg-white/90 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
-                </div>
-            </div>
-
-            <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden mb-4 border border-white/10">
-                <div class="absolute -left-6 -top-6 w-24 h-24 bg-rose-500 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
-                <div class="flex items-center justify-between mb-3 relative z-10">
-                    <h3 class="flex items-center gap-2 font-bold text-sm">
-                        <span class="text-lg">⏳</span>
-                        باقي لنصف السنة
-                    </h3>
-                    <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-md text-slate-300">شد حيلك!</span>
-                </div>
-                
-                <div class="grid grid-cols-4 gap-2 text-center relative z-10" dir="ltr">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
-                        <span class="text-lg sm:text-xl font-black digit-box text-rose-400" id="cd-days">00</span>
-                        <span class="text-[9px] text-slate-400 uppercase">يوم</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
-                        <span class="text-lg sm:text-xl font-black digit-box" id="cd-hours">00</span>
-                        <span class="text-[9px] text-slate-400 uppercase">ساعة</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
-                        <span class="text-lg sm:text-xl font-black digit-box" id="cd-minutes">00</span>
-                        <span class="text-[9px] text-slate-400 uppercase">دقيقة</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
-                        <span class="text-lg sm:text-xl font-black digit-box text-cyan-400" id="cd-seconds">00</span>
-                        <span class="text-[9px] text-slate-400 uppercase">ثانية</span>
+                    
+                    <div class="text-left flex flex-col justify-center min-w-[70px]">
+                        <div class="text-[10px] text-slate-400 font-bold mb-0.5">الدروس</div>
+                        <div class="text-base sm:text-xl font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg inline-flex items-center justify-center">
+                            <span id="statsCount">0</span>
+                            <span class="text-slate-300 mx-1 text-xs">/</span>
+                            <span id="statsTotal" class="text-slate-400 text-xs">0</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="relative">
-                <input type="text" id="searchInput" placeholder="ابحث عن محاضرة..." onkeyup="filterLectures()"
-                    class="w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white pl-10 pr-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-brand-500 transition placeholder:text-slate-400 text-sm">
-                <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6 scroll-smooth no-scrollbar" id="teachersContainer">
+        <main class="flex-1 overflow-y-auto px-3 sm:px-4 pt-20 pb-24 space-y-4 scroll-smooth w-full" id="teachersContainer">
             
-            <div id="resumeContainer" class="hidden animate-float">
-                <button onclick="resumeLastWatched()" class="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-4 rounded-2xl flex items-center justify-between shadow-xl group relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-violet-600/20 to-fuchsia-600/20 opacity-0 group-hover:opacity-100 transition"></div>
+            <div id="resumeContainer" class="hidden mb-4 mx-1 animate-enter">
+                <button onclick="resumeLastWatched()" class="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white p-4 rounded-2xl shadow-lg shadow-violet-500/20 flex items-center justify-between group animate-soft-pulse relative overflow-hidden">
+                    <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <div class="flex items-center gap-3 z-10">
-                        <div class="w-10 h-10 rounded-full bg-white/20 dark:bg-slate-900/10 flex items-center justify-center">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
                         <div class="text-right">
-                            <span class="block text-[10px] opacity-70 font-medium">آخر مشاهدة</span>
-                            <span class="block text-sm font-bold truncate max-w-[180px]" id="resumeTitle">...</span>
+                            <span class="block text-[10px] text-violet-200 font-medium mb-0.5">تابـع من حيـث توقفـت</span>
+                            <span class="block text-sm sm:text-base font-bold text-white truncate max-w-[200px]" id="resumeTitle">...</span>
                         </div>
                     </div>
-                    <div class="text-[10px] font-bold border border-current px-2 py-1 rounded-lg z-10">استمرار</div>
+                    <div class="bg-white text-violet-600 px-3 py-1.5 rounded-lg text-xs font-bold z-10 group-active:scale-95 transition-transform">
+                        استمرار ⚡
+                    </div>
                 </button>
             </div>
 
-            <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800/30 rounded-2xl p-4 flex items-start gap-3">
-                <span class="text-2xl mt-1">📖</span>
-                <div>
-                    <h3 class="text-amber-800 dark:text-amber-400 font-bold text-sm mb-1">دافع قرآني</h3>
-                    <p class="text-amber-700 dark:text-amber-200/80 text-xs leading-relaxed font-medium">"وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ * وَأَنَّ سَعْيَهُ سَوْفَ يُرَىٰ"</p>
-                </div>
+            <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 shadow-sm mx-1">
+                <h3 class="flex items-center gap-2 font-black text-sm text-amber-800 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+                    دافع قرآني
+                </h3>
+                <blockquote class="text-xs sm:text-sm font-medium text-amber-700 leading-relaxed border-r-2 border-amber-400 pr-2 mr-1">
+                    "وَقُل رَّبِّ زِدْنِي عِلْمًا" 
+                </blockquote>
             </div>
 
-            <div id="loader" class="space-y-4 animate-pulse">
-                <div class="h-32 bg-slate-200 dark:bg-slate-800 rounded-3xl"></div>
-                <div class="h-32 bg-slate-200 dark:bg-slate-800 rounded-3xl"></div>
-            </div>
-
+            <div class="text-center py-10 text-gray-400 animate-pulse text-sm" id="loadingText">جاري تحميل البيانات...</div>
         </main>
     </div>
 
-    <div id="videoModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300 backdrop-blur-md bg-black/80" onclick="closeVideoModal()">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col border border-white/10" onclick="event.stopPropagation()">
-            <div class="p-4 flex justify-between items-center border-b border-slate-100 dark:border-slate-800">
-                <h2 class="text-sm sm:text-lg font-bold truncate pl-4 dark:text-white" id="modalTitle">العنوان</h2>
-                <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center justify-center transition">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+    <div id="videoModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden modal-backdrop opacity-0 transition-opacity duration-300" onclick="closeVideoModal()">
+        <div class="bg-white rounded-2xl w-full max-w-3xl p-3 sm:p-4 shadow-2xl transform scale-95 transition-transform duration-300 flex flex-col max-h-[90vh]" onclick="event.stopPropagation()">
+            
+            <div class="flex justify-between items-center mb-3">
+                <h2 class="text-base sm:text-lg font-black text-slate-800 truncate pl-2" id="modalTitle">عنوان المحاضرة</h2>
+                <button onclick="closeVideoModal()" class="bg-slate-100 text-slate-500 hover:bg-slate-200 rounded-full p-1.5 transition shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-            <div class="relative w-full pb-[56.25%] bg-black">
-                <div id="videoContainer" class="absolute inset-0"></div>
+            
+            <div class="video-responsive bg-black rounded-xl shadow-inner overflow-hidden">
+                <div id="videoContainer" class="absolute inset-0 w-full h-full flex items-center justify-center text-white/50">
+                    </div>
             </div>
+
+            <p class="text-xs text-center text-slate-400 mt-3">يمكنك تدوير الشاشة للمشاهدة بوضع ملء الشاشة</p>
         </div>
     </div>
-
+    
     <script>
-        const PASSWORD = "123";
-        // ====================== إعدادات الوقت ======================
-        // غير هذا التاريخ حسب موعد الامتحانات (السنة-الشهر-اليوم)
-        const TARGET_DATE = new Date("2026-01-25T08:30:00").getTime(); 
-        // ==========================================================
-
-        let allData = [];
-        let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
-        let searchQuery = "";
-        const cardColors = [
-            "border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/10",
-            "border-l-4 border-green-500 bg-green-50/50 dark:bg-green-900/10",
-            "border-l-4 border-purple-500 bg-purple-50/50 dark:bg-purple-900/10",
-            "border-l-4 border-orange-500 bg-orange-50/50 dark:bg-orange-900/10",
-            "border-l-4 border-pink-500 bg-pink-50/50 dark:bg-pink-900/10",
+        // ================= قائمة الألوان المريحة (36 لون) =================
+        const lectureColors = [
+            "#F1F5F9", "#FFF1F2", "#FFF7ED", "#FEFCE8", "#F0FDF4", "#EFF6FF", 
+            "#FAF5FF", "#FDF4FF", "#FDF2F8", "#ECFEFF", "#F0F9FF", "#E0F2FE",
+            "#DBEAFE", "#E0E7FF", "#EDE9FE", "#FAE8FF", "#FCE7F3", "#FFE4E6",
+            "#FEE2E2", "#FFEDD5", "#FEF3C7", "#FCF6B0", "#D9F99D", "#BBF7D0",
+            "#DCFCE7", "#D1FAE5", "#CCFBF1", "#CFFAFE", "#E0F2F1", "#E8F5E9",
+            "#F3E5F5", "#FCE4EC", "#FFEBEE", "#EFEBE9", "#FAFAFA", "#ECEFF1"
         ];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('hameed_darkMode') === 'true' || (!('hameed_darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
+        // ================= المتغيرات =================
+        const PASSWORD = "123";
+        let allData = [];
+        let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
+
+        // ================= تسجيل الدخول =================
+        function checkLogin() {
+            const input = document.getElementById('passwordInput').value;
+            const error = document.getElementById('errorMsg');
+            
+            if (input === PASSWORD) {
+                localStorage.setItem('hameedApp_isLoggedIn', 'true');
+                const loginScreen = document.getElementById('loginScreen');
+                loginScreen.classList.add('opacity-0', 'pointer-events-none');
+                
+                setTimeout(() => {
+                    loginScreen.classList.add('hidden');
+                    document.getElementById('appScreen').classList.remove('hidden');
+                    loadData(); 
+                }, 500);
+            } else {
+                error.classList.remove('hidden');
+                const field = document.getElementById('passwordInput');
+                field.classList.add('animate-pulse', 'border-rose-400', 'bg-rose-50');
+                field.value = '';
+                setTimeout(() => {
+                    field.classList.remove('animate-pulse', 'border-rose-400', 'bg-rose-50');
+                }, 1000);
             }
+        }
+
+        function logout() {
+            localStorage.removeItem('hameedApp_isLoggedIn');
+            location.reload();
+        }
+
+        // ================= جلب البيانات =================
+        async function loadData() {
+            try {
+                const dataFromBackend = {
+                    "teachers": [
+                        {
+                            "id": 3,
+                            "name": "أ. حيدر وليد",
+                            "subject": "الرياضيات",
+                            "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
+                            "classes": [
+                                {
+                                    "name": "الفصل الثالث",
+                                    "lectures": [
+                                        { "id": 301, "title": "المحاضرة 1", "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4", "description": "" },
+                                        { "id": 302, "title": "المحاضرة 2", "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d", "description": "" },
+                                        { "id": 303, "title": "المحاضرة 3 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e", "description": "" },
+                                        { "id": 304, "title": "المحاضرة 3 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9", "description": "" },
+                                        { "id": 305, "title": "المحاضرة 4 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815", "description": "" },
+                                        { "id": 306, "title": "المحاضرة 4 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815", "description": "" },
+                                        { "id": 307, "title": "المحاضرة 5", "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274", "description": "" },
+                                        { "id": 308, "title": "المحاضرة 6", "url": "#", "description": "" },
+                                        { "id": 309, "title": "المحاضرة 7", "url": "#", "description": "" },
+                                        { "id": 310, "title": "المحاضرة 8", "url": "#", "description": "" }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                };
+
+                allData = dataFromBackend.teachers.map(teacher => {
+                    let allLectures = [];
+                    teacher.classes.forEach(cls => {
+                        cls.lectures.forEach(lecture => {
+                            const fullTitle = `${cls.name}: ${lecture.title}`;
+                            allLectures.push({
+                                id: lecture.id,
+                                title: fullTitle,
+                                url: lecture.url
+                            });
+                        });
+                    });
+
+                    return {
+                        id: teacher.id,
+                        name: teacher.name,
+                        subject: teacher.subject,
+                        image: teacher.image,
+                        lectures: allLectures
+                    };
+                });
+                
+                renderApp();
+                updateStats();
+                setGreeting();
+                checkLastWatched(); // التحقق من السجل عند التحميل
+            } catch (error) {
+                console.error("Error loading data:", error);
+            }
+        }
+
+        // ================= رسم الواجهة =================
+        function renderApp() {
+            const container = document.getElementById('teachersContainer');
+            const loadingText = document.getElementById('loadingText');
+            if(loadingText) loadingText.remove(); // إزالة نص التحميل
+
+            // (ملاحظة: زر المشاهدة موجود الآن في HTML ويتم التحكم بإظهاره عبر JS)
+            // (ملاحظة: الدافع القرآني موجود في HTML أيضاً)
+
+            if (!Array.isArray(allData) || allData.length === 0) {
+                container.innerHTML += '<p class="text-center text-gray-400 text-sm mt-10">ماكو محاضرات حالياً</p>';
+                return;
+            }
+
+            allData.forEach((teacher, index) => {
+                const teacherCard = document.createElement('div');
+                teacherCard.className = 'bg-white rounded-3xl p-3 sm:p-5 shadow-sm border border-slate-100 animate-enter mb-4 mx-1'; 
+                teacherCard.style.animationDelay = `${index * 100}ms`;
+
+                let lecturesHtml = '';
+                
+                teacher.lectures.forEach((lecture, lIndx) => {
+                    const isDone = completedLectures.includes(lecture.id);
+                    const cardColor = lectureColors[lIndx % lectureColors.length];
+                    
+                    lecturesHtml += `
+                        <div style="background-color: ${cardColor};" class="flex items-center justify-between p-3 sm:p-4 rounded-xl mb-3 last:mb-0 border border-slate-100/50 shadow-sm transition-transform active:scale-[0.99]">
+                            <div class="flex items-center gap-3 flex-1 cursor-pointer select-none min-w-0" onclick="toggleComplete(${lecture.id})">
+                                <div class="check-box-wrapper relative shrink-0">
+                                    <input type="checkbox" class="sr-only" ${isDone ? 'checked' : ''}>
+                                    <div class="w-6 h-6 border-2 border-slate-300 rounded-lg flex items-center justify-center transition-all duration-300 bg-white shadow-sm group-hover:border-blue-400">
+                                        <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all duration-300 stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                </div>
+                                <span class="font-bold text-slate-800 text-base sm:text-lg leading-relaxed transition-all ${isDone ? 'line-through text-slate-400 opacity-60' : ''}">
+                                    ${lecture.title}
+                                </span>
+                            </div>
+
+                            <button onclick="openVideoModal('${lecture.title.replace(/'/g, "\\'")}', '${lecture.url}', ${lecture.id})" 
+                                class="mr-2 ${lecture.url === '#' ? 'bg-white/50 text-slate-400 cursor-default' : 'bg-white text-blue-600 shadow-sm hover:shadow-md active:scale-95' } w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 shrink-0">
+                                <span class="hidden sm:inline">${lecture.url === '#' ? 'لا يوجد' : 'مشاهدة'}</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                teacherCard.innerHTML = `
+                    <div class="flex items-center gap-4 border-b border-slate-100 pb-4 mb-4 border-dashed">
+                        <img src="${teacher.image}" onerror="this.src='https://ui-avatars.com/api/?name=${teacher.name}&background=random'" 
+                             class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-slate-100 shadow-md object-cover ring-4 ring-white shrink-0">
+                        <div>
+                            <h2 class="font-black text-xl sm:text-2xl text-slate-800 mb-1">${teacher.name}</h2>
+                            <span class="text-xs sm:text-sm font-bold bg-blue-50 text-blue-600 px-3 py-1 rounded-lg inline-block">${teacher.subject}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">${lecturesHtml}</div>
+                `;
+
+                container.appendChild(teacherCard);
+            });
+        }
+
+        // ================= ميزات "اخر مشاهدة" =================
+        function checkLastWatched() {
+            const lastWatchedData = localStorage.getItem('hameed_lastWatched');
+            const resumeContainer = document.getElementById('resumeContainer');
+            
+            if (lastWatchedData) {
+                const data = JSON.parse(lastWatchedData);
+                document.getElementById('resumeTitle').innerText = data.title;
+                resumeContainer.classList.remove('hidden');
+                
+                // تحريك الزر ليظهر بشكل جميل
+                resumeContainer.classList.remove('opacity-0'); 
+            } else {
+                resumeContainer.classList.add('hidden');
+            }
+        }
+
+        function resumeLastWatched() {
+            const lastWatchedData = localStorage.getItem('hameed_lastWatched');
+            if (lastWatchedData) {
+                const data = JSON.parse(lastWatchedData);
+                openVideoModal(data.title, data.url, data.id, false); // false لعدم إعادة الحفظ (اختياري)
+            }
+        }
+
+        function saveLastWatched(title, url, id) {
+            if (url === '#') return;
+            const data = { title, url, id };
+            localStorage.setItem('hameed_lastWatched', JSON.stringify(data));
+            checkLastWatched(); // تحديث الزر فوراً
+        }
+
+        // ================= التفاعل =================
+        function toggleComplete(id) {
+            if (completedLectures.includes(id)) {
+                completedLectures = completedLectures.filter(item => item !== id);
+            } else {
+                completedLectures.push(id);
+                triggerConfetti(0.2); 
+            }
+            
+            localStorage.setItem('hameed_completed', JSON.stringify(completedLectures));
+            renderApp(); 
+            updateStats(); 
+        }
+
+        function updateStats() {
+            let totalLectures = 0;
+            allData.forEach(t => totalLectures += t.lectures.length);
+            
+            const completedCount = completedLectures.length;
+            const percent = totalLectures === 0 ? 0 : Math.round((completedCount / totalLectures) * 100);
+
+            // Animate Numbers
+            document.getElementById('statsCount').innerText = completedCount;
+            document.getElementById('statsTotal').innerText = totalLectures;
+            document.getElementById('percentage').innerText = percent + "%";
+
+            const statusBadge = document.getElementById('statusBadge');
+            if (percent === 100) {
+                statusBadge.innerText = "ختمتها يا بطل! 🏆";
+                statusBadge.className = "text-[10px] sm:text-xs text-green-700 font-bold bg-green-100 px-2 py-0.5 rounded-full";
+                triggerConfetti(1); 
+            } else if (percent > 50) {
+                statusBadge.innerText = "عاشت ايدك استمر 🔥";
+                statusBadge.className = "text-[10px] sm:text-xs text-orange-700 font-bold bg-orange-100 px-2 py-0.5 rounded-full";
+            } else {
+                statusBadge.innerText = "بداية قوية 💪";
+                statusBadge.className = "text-[10px] sm:text-xs text-blue-700 font-bold bg-blue-100 px-2 py-0.5 rounded-full";
+            }
+        }
+
+        function openVideoModal(title, url, id, shouldSave = true) {
+            if (url === '#') {
+                alert('عفواً، رابط هذه المحاضرة غير متوفر حالياً.');
+                return;
+            }
+
+            // حفظ في السجل
+            if (shouldSave) {
+                saveLastWatched(title, url, id);
+            }
+
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            modalTitle.innerText = title;
+            
+            const iframe = document.createElement('iframe');
+            iframe.src = url;
+            iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+            iframe.title = title;
+            
+            videoContainer.innerHTML = '';
+            videoContainer.appendChild(iframe);
+
+            modal.classList.remove('hidden', 'opacity-0');
+            modal.classList.add('opacity-100');
+            modal.querySelector('div').classList.remove('scale-95');
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const videoContainer = document.getElementById('videoContainer');
+            
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                videoContainer.innerHTML = '';
+            }, 300);
+        }
+
+        function setGreeting() {
+            const hour = new Date().getHours();
+            const greeting = hour < 12 ? "صباح الخير يا بطل ☀️" : "مساء الخير يا بطل 🌙";
+            document.getElementById('greetingMsg').innerText = greeting;
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
+            document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-IQ', options);
+        }
+
+        // Confetti
+        function triggerConfetti(intensity = 1) {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 50 * intensity; 
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 15,
+                    vy: (Math.random() - 0.5) * 15 - 5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 5 + 2,
+                    life: 80
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let activeParticles = false;
+                particles.forEach(p => {
+                    if (p.life > 0) {
+                        activeParticles = true;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.4;
+                        p.life--;
+                        p.size *= 0.95;
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x, p.y, p.size, p.size);
+                    }
+                });
+                if (activeParticles) requestAnimationFrame(animate);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            animate();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('hameedApp_isLoggedIn') === 'true') {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appScreen').classList.remove('hidden');
                 loadData();
             }
-            startCountdown(); // تشغيل العداد
         });
 
-        // ================= كود العداد التنازلي =================
-        function startCountdown() {
-            const timer = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = TARGET_DATE - now;
-
-                if (distance < 0) {
-                    clearInterval(timer);
-                    document.getElementById("cd-days").innerText = "00";
-                    document.getElementById("cd-hours").innerText = "00";
-                    document.getElementById("cd-minutes").innerText = "00";
-                    document.getElementById("cd-seconds").innerText = "00";
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("cd-days").innerText = days < 10 ? "0" + days : days;
-                document.getElementById("cd-hours").innerText = hours < 10 ? "0" + hours : hours;
-                document.getElementById("cd-minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
-                document.getElementById("cd-seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
-            }, 1000);
-        }
-        // ======================================================
-
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('hameed_darkMode', document.documentElement.classList.contains('dark'));
-        }
-
-        function checkLogin() {
-            const input = document.getElementById('passwordInput');
-            if (input.value === PASSWORD) {
-                localStorage.setItem('hameedApp_isLoggedIn', 'true');
-                const screen = document.getElementById('loginScreen');
-                screen.classList.add('opacity-0', 'scale-110');
-                setTimeout(() => {
-                    screen.classList.add('hidden');
-                    document.getElementById('appScreen').classList.remove('hidden');
-                    loadData();
-                    showToast('تم الدخول بنجاح! 🚀');
-                }, 500);
-            } else {
-                showToast('الرمز خطأ! ❌', 'error');
-                input.value = ''; input.focus();
-            }
-        }
-
-        function logout() {
-            if(confirm('تطلع؟')) { localStorage.removeItem('hameedApp_isLoggedIn'); location.reload(); }
-        }
-
-        async function loadData() {
-            setTimeout(() => {
-                const rawData = {
-                    "teachers": [
-                        {
-                            "id": 3, "name": "أ. حيدر وليد", "subject": "الرياضيات", 
-                            "image": "https://zockto.b-cdn.net/IMG_%D9%A2%D9%A0%D9%A2%D9%A5%D9%A1%D9%A1%D9%A2%D9%A2_%D9%A2%D9%A3%D9%A1%D9%A1%D9%A4%D9%A0_231.jpg",
-                            "classes": [
-                                { "name": "الفصل الثالث", "lectures": [
-                                    { "id": 301, "title": "المحاضرة 1", "url": "https://iframe.mediadelivery.net/embed/519756/ed13dc36-4508-45be-a79c-ca55e2ca12a4" },
-                                    { "id": 302, "title": "المحاضرة 2", "url": "https://iframe.mediadelivery.net/embed/519756/951bdcde-9443-445b-bbea-ee438fc8081d" },
-                                    { "id": 303, "title": "المحاضرة 3 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/6e1ce8f5-f2b9-445a-a661-62f0de7be94e" },
-                                    { "id": 304, "title": "المحاضرة 3 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/f117345a-1799-4372-be36-3db68730f9d9" },
-                                    { "id": 305, "title": "المحاضرة 4 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815" },
-                                    { "id": 306, "title": "المحاضرة 4 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815" },
-                                    { "id": 307, "title": "المحاضرة 5", "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274" },
-                                ]}
-                            ]
-                        }
-                    ]
-                };
-                allData = rawData.teachers.map(teacher => {
-                    let flatLectures = [];
-                    teacher.classes.forEach(cls => {
-                        cls.lectures.forEach(l => { flatLectures.push({ ...l, fullTitle: `${cls.name}: ${l.title}`, teacherName: teacher.name }); });
-                    });
-                    return { ...teacher, lectures: flatLectures };
-                });
-                document.getElementById('loader').remove();
-                renderApp();
-                updateGreeting();
-                updateStats();
-                checkLastWatched();
-            }, 800);
-        }
-
-        function renderApp() {
-            const container = document.getElementById('teachersContainer');
-            const resumeBtn = document.getElementById('resumeContainer');
-            const motivation = container.querySelector('.bg-amber-50');
-            container.innerHTML = '';
-            if(resumeBtn) container.appendChild(resumeBtn);
-            if(motivation) container.appendChild(motivation);
-            let hasResults = false;
-            allData.forEach(teacher => {
-                const filteredLectures = teacher.lectures.filter(l => l.fullTitle.toLowerCase().includes(searchQuery.toLowerCase()));
-                if (filteredLectures.length > 0) {
-                    hasResults = true;
-                    const card = document.createElement('div');
-                    card.className = 'bg-white dark:bg-slate-800 rounded-3xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 transition-all';
-                    let lecturesHtml = '';
-                    filteredLectures.forEach((l, idx) => {
-                        const isDone = completedLectures.includes(l.id);
-                        const styleClass = cardColors[idx % cardColors.length];
-                        lecturesHtml += `
-                            <div class="flex items-center justify-between p-3 rounded-xl mb-3 last:mb-0 transition-all hover:bg-slate-50 dark:hover:bg-slate-700/50 ${styleClass}">
-                                <div class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onclick="toggleComplete(${l.id})">
-                                    <div class="checkbox-wrapper relative shrink-0 w-6 h-6">
-                                        <input type="checkbox" class="sr-only" ${isDone ? 'checked' : ''}>
-                                        <div class="w-6 h-6 border-2 border-slate-300 dark:border-slate-500 rounded-lg flex items-center justify-center transition-all bg-white dark:bg-slate-800">
-                                            <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                                        </div>
-                                    </div>
-                                    <span class="font-bold text-sm sm:text-base dark:text-slate-200 transition-all ${isDone ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${l.fullTitle}</span>
-                                </div>
-                                <button onclick="openVideoModal('${l.fullTitle}', '${l.url}', ${l.id})" class="${l.url === '#' ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300 hover:bg-brand-600 hover:text-white'} w-10 h-10 rounded-xl flex items-center justify-center transition shadow-sm active:scale-95 shrink-0 ml-1">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                </button>
-                            </div>`;
-                    });
-                    card.innerHTML = `<div class="flex items-center gap-4 border-b border-slate-100 dark:border-slate-700 pb-4 mb-4"><img src="${teacher.image}" class="w-16 h-16 rounded-2xl bg-slate-200 object-cover shadow-md ring-2 ring-white dark:ring-slate-600"><div><h2 class="font-black text-lg text-slate-800 dark:text-white">${teacher.name}</h2><span class="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">${teacher.subject}</span></div></div><div class="space-y-1">${lecturesHtml}</div>`;
-                    container.appendChild(card);
-                }
-            });
-            if (!hasResults) container.innerHTML += `<div class="text-center py-10 opacity-60"><p class="text-slate-500 dark:text-slate-400 font-bold">ما لقينا شي!</p></div>`;
-        }
-
-        function filterLectures() { searchQuery = document.getElementById('searchInput').value; renderApp(); }
-        
-        function toggleComplete(id) {
-            if (completedLectures.includes(id)) { completedLectures = completedLectures.filter(i => i !== id); } 
-            else { completedLectures.push(id); triggerConfetti(); showToast('عاشت إيدك! 💪'); }
-            localStorage.setItem('hameed_completed', JSON.stringify(completedLectures)); renderApp(); updateStats();
-        }
-
-        function updateStats() {
-            let total = 0; allData.forEach(t => total += t.lectures.length);
-            const count = completedLectures.length;
-            const percent = total === 0 ? 0 : Math.round((count / total) * 100);
-            document.getElementById('percentage').innerText = percent + "%";
-            document.getElementById('statsCount').innerText = count; document.getElementById('statsTotal').innerText = total;
-            document.getElementById('progressBar').style.width = percent + "%";
-            const badge = document.getElementById('statusBadge');
-            if (percent === 100) { badge.innerText = "ختمت المادة 🏆"; badge.className = "bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold mb-1 shadow-lg"; }
-            else if (percent > 50) { badge.innerText = "واصل التقدم 🔥"; badge.className = "bg-orange-500 text-white px-3 py-1 rounded-lg text-xs font-bold mb-1 shadow-lg"; }
-            else { badge.innerText = "بداية موفقة 🚀"; badge.className = "bg-white/20 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold mb-1 border border-white/10"; }
-        }
-
-        function openVideoModal(title, url, id, save = true) {
-            if (url === '#') { showToast('المحاضرة قريباً! ⏳', 'info'); return; }
-            if (save) { localStorage.setItem('hameed_lastWatched', JSON.stringify({ title, url, id })); checkLastWatched(); }
-            const modal = document.getElementById('videoModal');
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('videoContainer').innerHTML = `<iframe src="${url}" class="absolute top-0 left-0 w-full h-full rounded-lg" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('opacity-0'); modal.firstElementChild.classList.remove('scale-95'); modal.firstElementChild.classList.add('scale-100'); }, 10);
-        }
-
-        function closeVideoModal() {
-            const modal = document.getElementById('videoModal');
-            modal.classList.add('opacity-0'); modal.firstElementChild.classList.remove('scale-100'); modal.firstElementChild.classList.add('scale-95');
-            setTimeout(() => { modal.classList.add('hidden'); document.getElementById('videoContainer').innerHTML = ''; }, 300);
-        }
-
-        function checkLastWatched() {
-            const data = JSON.parse(localStorage.getItem('hameed_lastWatched'));
-            if (data) { document.getElementById('resumeTitle').innerText = data.title; document.getElementById('resumeContainer').classList.remove('hidden'); }
-        }
-        function resumeLastWatched() { const data = JSON.parse(localStorage.getItem('hameed_lastWatched')); if (data) openVideoModal(data.title, data.url, data.id, false); }
-
-        function updateGreeting() {
-            const h = new Date().getHours();
-            document.getElementById('greetingMsg').innerText = h < 12 ? "صباح الخير يا بطل ☀️" : "مساء الخير يا مبدع 🌙";
-            document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-IQ', { weekday: 'long', day: 'numeric', month: 'short' });
-        }
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const colors = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-rose-500' : 'bg-blue-500');
-            toast.className = `${colors} text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3 transform translate-y-10 opacity-0 transition-all duration-500 font-bold text-sm justify-center`;
-            toast.innerHTML = `<span>${message}</span>`;
-            container.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
-            setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 500); }, 3000);
-        }
-
-        function triggerConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            const particles = [];
-            for(let i=0; i<60; i++) particles.push({ x: canvas.width/2, y: canvas.height/2, vx: (Math.random()-0.5)*15, vy: (Math.random()-0.5)*15 - 5, color: `hsl(${Math.random()*360}, 100%, 50%)`, life: 100, size: Math.random()*5+2 });
-            function animate() {
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                let active = false;
-                particles.forEach(p => { if(p.life > 0) { active = true; p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.life--; p.size *= 0.96; ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); } });
-                if(active) requestAnimationFrame(animate); else ctx.clearRect(0,0,canvas.width,canvas.height);
-            }
-            animate();
-        }
-        document.getElementById('passwordInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkLogin() });
+        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkLogin();
+        });
     </script>
 </body>
 </html>
