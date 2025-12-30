@@ -16,13 +16,12 @@
                         brand: {
                             50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#1e3a8a',
                         },
-                        dark: {
-                            bg: '#0f172a', card: '#1e293b', text: '#f1f5f9'
-                        }
+                        dark: { bg: '#0f172a', card: '#1e293b', text: '#f1f5f9' }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'blob': 'blob 7s infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         float: {
@@ -41,11 +40,9 @@
         }
     </script>
     <style>
-        /* إخفاء شريط التمرير لكن مع بقاء الوظيفة */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* تأثير الزجاج */
         .glass {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
@@ -57,19 +54,18 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Checkbox Animation */
-        .checkbox-wrapper input:checked + div {
-            background-color: #10b981; border-color: #10b981;
-        }
+        .checkbox-wrapper input:checked + div { background-color: #10b981; border-color: #10b981; }
         .checkbox-wrapper input:checked + div svg { stroke-dashoffset: 0; }
         
         #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        
+        /* Digital Clock Font Style */
+        .digit-box { font-variant-numeric: tabular-nums; }
     </style>
 </head>
 <body class="bg-gray-50 text-slate-800 dark:bg-dark-bg dark:text-gray-100 transition-colors duration-300 h-[100dvh] flex flex-col overflow-hidden selection:bg-brand-500 selection:text-white">
 
     <canvas id="confetti-canvas"></canvas>
-
     <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] space-y-2 w-[90%] max-w-sm pointer-events-none"></div>
 
     <div id="loginScreen" class="fixed inset-0 z-[60] flex flex-col items-center justify-center transition-all duration-700">
@@ -100,12 +96,11 @@
                 </button>
             </div>
         </div>
-        <p class="relative text-white/20 text-[10px] mt-8 tracking-widest uppercase">Version 4.0 Pro</p>
     </div>
 
     <div id="appScreen" class="hidden h-full flex flex-col relative w-full max-w-2xl mx-auto bg-white dark:bg-dark-bg shadow-2xl overflow-hidden transition-colors duration-300">
         
-        <header class="relative bg-white dark:bg-dark-card pt-6 pb-4 px-5 z-20 shrink-0 border-b border-slate-100 dark:border-slate-800">
+        <header class="relative bg-white dark:bg-dark-card pt-6 pb-4 px-5 z-20 shrink-0 border-b border-slate-100 dark:border-slate-800 h-auto overflow-y-auto no-scrollbar max-h-[45vh]">
             <div class="flex justify-between items-center mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/30 rounded-full flex items-center justify-center text-xl">👋</div>
@@ -125,7 +120,7 @@
                 </div>
             </div>
 
-            <div class="bg-gradient-to-r from-brand-600 to-blue-500 rounded-2xl p-4 text-white shadow-lg shadow-brand-500/20 relative overflow-hidden">
+            <div class="bg-gradient-to-r from-brand-600 to-blue-500 rounded-2xl p-4 text-white shadow-lg shadow-brand-500/20 relative overflow-hidden mb-4">
                 <div class="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
                 <div class="flex justify-between items-end relative z-10">
                     <div>
@@ -144,7 +139,36 @@
                 </div>
             </div>
 
-            <div class="mt-4 relative">
+            <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-4 text-white shadow-lg relative overflow-hidden mb-4 border border-white/10">
+                <div class="absolute -left-6 -top-6 w-24 h-24 bg-rose-500 rounded-full blur-3xl opacity-20 animate-pulse-slow"></div>
+                <div class="flex items-center justify-between mb-3 relative z-10">
+                    <h3 class="flex items-center gap-2 font-bold text-sm">
+                        <span class="text-lg">⏳</span>
+                        باقي لنصف السنة
+                    </h3>
+                    <span class="text-[10px] bg-white/10 px-2 py-0.5 rounded-md text-slate-300">شد حيلك!</span>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-2 text-center relative z-10" dir="ltr">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
+                        <span class="text-lg sm:text-xl font-black digit-box text-rose-400" id="cd-days">00</span>
+                        <span class="text-[9px] text-slate-400 uppercase">يوم</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
+                        <span class="text-lg sm:text-xl font-black digit-box" id="cd-hours">00</span>
+                        <span class="text-[9px] text-slate-400 uppercase">ساعة</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
+                        <span class="text-lg sm:text-xl font-black digit-box" id="cd-minutes">00</span>
+                        <span class="text-[9px] text-slate-400 uppercase">دقيقة</span>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-2 flex flex-col items-center">
+                        <span class="text-lg sm:text-xl font-black digit-box text-cyan-400" id="cd-seconds">00</span>
+                        <span class="text-[9px] text-slate-400 uppercase">ثانية</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
                 <input type="text" id="searchInput" placeholder="ابحث عن محاضرة..." onkeyup="filterLectures()"
                     class="w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white pl-10 pr-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-brand-500 transition placeholder:text-slate-400 text-sm">
                 <svg class="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
@@ -187,61 +211,81 @@
 
     <div id="videoModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300 backdrop-blur-md bg-black/80" onclick="closeVideoModal()">
         <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col border border-white/10" onclick="event.stopPropagation()">
-            
             <div class="p-4 flex justify-between items-center border-b border-slate-100 dark:border-slate-800">
                 <h2 class="text-sm sm:text-lg font-bold truncate pl-4 dark:text-white" id="modalTitle">العنوان</h2>
                 <button onclick="closeVideoModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 flex items-center justify-center transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
-            
             <div class="relative w-full pb-[56.25%] bg-black">
                 <div id="videoContainer" class="absolute inset-0"></div>
-            </div>
-            
-            <div class="p-3 bg-slate-50 dark:bg-slate-950 text-center">
-                <p class="text-[10px] text-slate-400">نصيحة: استخدم الوضع الأفقي للموبايل لأفضل تجربة</p>
             </div>
         </div>
     </div>
 
     <script>
-        // ================= المتغيرات الأساسية =================
         const PASSWORD = "123";
+        // ====================== إعدادات الوقت ======================
+        // غير هذا التاريخ حسب موعد الامتحانات (السنة-الشهر-اليوم)
+        const TARGET_DATE = new Date("2026-01-25T08:30:00").getTime(); 
+        // ==========================================================
+
         let allData = [];
         let completedLectures = JSON.parse(localStorage.getItem('hameed_completed')) || [];
         let searchQuery = "";
-
-        // ================= الألوان العشوائية للكروت (Pastel + Dark support) =================
         const cardColors = [
             "border-l-4 border-blue-500 bg-blue-50/50 dark:bg-blue-900/10",
             "border-l-4 border-green-500 bg-green-50/50 dark:bg-green-900/10",
             "border-l-4 border-purple-500 bg-purple-50/50 dark:bg-purple-900/10",
             "border-l-4 border-orange-500 bg-orange-50/50 dark:bg-orange-900/10",
             "border-l-4 border-pink-500 bg-pink-50/50 dark:bg-pink-900/10",
-            "border-l-4 border-cyan-500 bg-cyan-50/50 dark:bg-cyan-900/10",
         ];
 
-        // ================= التهيئة والوضع الليلي =================
         document.addEventListener('DOMContentLoaded', () => {
-            // استعادة وضع الظلام
             if (localStorage.getItem('hameed_darkMode') === 'true' || (!('hameed_darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             }
-
             if (localStorage.getItem('hameedApp_isLoggedIn') === 'true') {
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('appScreen').classList.remove('hidden');
                 loadData();
             }
+            startCountdown(); // تشغيل العداد
         });
+
+        // ================= كود العداد التنازلي =================
+        function startCountdown() {
+            const timer = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = TARGET_DATE - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    document.getElementById("cd-days").innerText = "00";
+                    document.getElementById("cd-hours").innerText = "00";
+                    document.getElementById("cd-minutes").innerText = "00";
+                    document.getElementById("cd-seconds").innerText = "00";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("cd-days").innerText = days < 10 ? "0" + days : days;
+                document.getElementById("cd-hours").innerText = hours < 10 ? "0" + hours : hours;
+                document.getElementById("cd-minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("cd-seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+            }, 1000);
+        }
+        // ======================================================
 
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('hameed_darkMode', document.documentElement.classList.contains('dark'));
         }
 
-        // ================= تسجيل الدخول =================
         function checkLogin() {
             const input = document.getElementById('passwordInput');
             if (input.value === PASSWORD) {
@@ -252,25 +296,19 @@
                     screen.classList.add('hidden');
                     document.getElementById('appScreen').classList.remove('hidden');
                     loadData();
-                    showToast('تم تسجيل الدخول بنجاح! 🚀', 'success');
+                    showToast('تم الدخول بنجاح! 🚀');
                 }, 500);
             } else {
-                showToast('الرمز السري خطأ! ❌', 'error');
-                input.value = '';
-                input.focus();
+                showToast('الرمز خطأ! ❌', 'error');
+                input.value = ''; input.focus();
             }
         }
 
         function logout() {
-            if(confirm('متأكد تريد تطلع؟')) {
-                localStorage.removeItem('hameedApp_isLoggedIn');
-                location.reload();
-            }
+            if(confirm('تطلع؟')) { localStorage.removeItem('hameedApp_isLoggedIn'); location.reload(); }
         }
 
-        // ================= البيانات والتحميل =================
         async function loadData() {
-            // محاكاة تأخير بسيط للواقعية
             setTimeout(() => {
                 const rawData = {
                     "teachers": [
@@ -286,25 +324,18 @@
                                     { "id": 305, "title": "المحاضرة 4 - ج1", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815" },
                                     { "id": 306, "title": "المحاضرة 4 - ج2", "url": "https://iframe.mediadelivery.net/embed/519756/1937693d-ad81-4e27-afb7-8843b1051815" },
                                     { "id": 307, "title": "المحاضرة 5", "url": "https://iframe.mediadelivery.net/embed/519756/5ad74f20-c066-4874-882a-a5615ee52274" },
-                                    { "id": 308, "title": "المحاضرة 6 (قريباً)", "url": "#" },
-                                    { "id": 309, "title": "المحاضرة 7 (قريباً)", "url": "#" }
                                 ]}
                             ]
                         }
                     ]
                 };
-
-                // تسطيح البيانات لتسهيل العرض
                 allData = rawData.teachers.map(teacher => {
                     let flatLectures = [];
                     teacher.classes.forEach(cls => {
-                        cls.lectures.forEach(l => {
-                            flatLectures.push({ ...l, fullTitle: `${cls.name}: ${l.title}`, teacherName: teacher.name });
-                        });
+                        cls.lectures.forEach(l => { flatLectures.push({ ...l, fullTitle: `${cls.name}: ${l.title}`, teacherName: teacher.name }); });
                     });
                     return { ...teacher, lectures: flatLectures };
                 });
-
                 document.getElementById('loader').remove();
                 renderApp();
                 updateGreeting();
@@ -313,35 +344,24 @@
             }, 800);
         }
 
-        // ================= الرسم والعرض (Rendering) =================
         function renderApp() {
             const container = document.getElementById('teachersContainer');
-            // الاحتفاظ بالعناصر الثابتة (زر الاستمرار والدافع)
             const resumeBtn = document.getElementById('resumeContainer');
-            const motivation = container.querySelector('.bg-amber-50'); // تحديد عنصر الدافع
-            
-            container.innerHTML = ''; // مسح المحتوى
+            const motivation = container.querySelector('.bg-amber-50');
+            container.innerHTML = '';
             if(resumeBtn) container.appendChild(resumeBtn);
             if(motivation) container.appendChild(motivation);
-
             let hasResults = false;
-
             allData.forEach(teacher => {
-                // تصفية المحاضرات حسب البحث
-                const filteredLectures = teacher.lectures.filter(l => 
-                    l.fullTitle.toLowerCase().includes(searchQuery.toLowerCase())
-                );
-
+                const filteredLectures = teacher.lectures.filter(l => l.fullTitle.toLowerCase().includes(searchQuery.toLowerCase()));
                 if (filteredLectures.length > 0) {
                     hasResults = true;
                     const card = document.createElement('div');
                     card.className = 'bg-white dark:bg-slate-800 rounded-3xl p-5 shadow-sm border border-slate-100 dark:border-slate-700 transition-all';
-                    
                     let lecturesHtml = '';
                     filteredLectures.forEach((l, idx) => {
                         const isDone = completedLectures.includes(l.id);
                         const styleClass = cardColors[idx % cardColors.length];
-                        
                         lecturesHtml += `
                             <div class="flex items-center justify-between p-3 rounded-xl mb-3 last:mb-0 transition-all hover:bg-slate-50 dark:hover:bg-slate-700/50 ${styleClass}">
                                 <div class="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onclick="toggleComplete(${l.id})">
@@ -351,190 +371,94 @@
                                             <svg class="w-3.5 h-3.5 text-white stroke-[3] transition-all stroke-dasharray-10 stroke-dashoffset-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="font-bold text-sm sm:text-base dark:text-slate-200 transition-all ${isDone ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${l.fullTitle}</span>
-                                    </div>
+                                    <span class="font-bold text-sm sm:text-base dark:text-slate-200 transition-all ${isDone ? 'line-through text-slate-400 dark:text-slate-500' : ''}">${l.fullTitle}</span>
                                 </div>
-                                <button onclick="openVideoModal('${l.fullTitle}', '${l.url}', ${l.id})" 
-                                    class="${l.url === '#' ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300 hover:bg-brand-600 hover:text-white'} 
-                                    w-10 h-10 rounded-xl flex items-center justify-center transition shadow-sm active:scale-95 shrink-0 ml-1">
+                                <button onclick="openVideoModal('${l.fullTitle}', '${l.url}', ${l.id})" class="${l.url === '#' ? 'bg-slate-100 text-slate-400 cursor-not-allowed' : 'bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-300 hover:bg-brand-600 hover:text-white'} w-10 h-10 rounded-xl flex items-center justify-center transition shadow-sm active:scale-95 shrink-0 ml-1">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 </button>
-                            </div>
-                        `;
+                            </div>`;
                     });
-
-                    card.innerHTML = `
-                        <div class="flex items-center gap-4 border-b border-slate-100 dark:border-slate-700 pb-4 mb-4">
-                            <img src="${teacher.image}" class="w-16 h-16 rounded-2xl bg-slate-200 object-cover shadow-md ring-2 ring-white dark:ring-slate-600">
-                            <div>
-                                <h2 class="font-black text-lg text-slate-800 dark:text-white">${teacher.name}</h2>
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">${teacher.subject}</span>
-                            </div>
-                        </div>
-                        <div class="space-y-1">${lecturesHtml}</div>
-                    `;
+                    card.innerHTML = `<div class="flex items-center gap-4 border-b border-slate-100 dark:border-slate-700 pb-4 mb-4"><img src="${teacher.image}" class="w-16 h-16 rounded-2xl bg-slate-200 object-cover shadow-md ring-2 ring-white dark:ring-slate-600"><div><h2 class="font-black text-lg text-slate-800 dark:text-white">${teacher.name}</h2><span class="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md">${teacher.subject}</span></div></div><div class="space-y-1">${lecturesHtml}</div>`;
                     container.appendChild(card);
                 }
             });
-
-            if (!hasResults) {
-                container.innerHTML += `
-                    <div class="text-center py-10 opacity-60">
-                        <div class="text-4xl mb-2">🔍</div>
-                        <p class="text-slate-500 dark:text-slate-400 font-bold">ما لقينا شي بهذا الاسم!</p>
-                    </div>`;
-            }
+            if (!hasResults) container.innerHTML += `<div class="text-center py-10 opacity-60"><p class="text-slate-500 dark:text-slate-400 font-bold">ما لقينا شي!</p></div>`;
         }
 
-        // ================= البحث =================
-        function filterLectures() {
-            searchQuery = document.getElementById('searchInput').value;
-            renderApp();
-        }
-
-        // ================= الإحصائيات والتفاعل =================
+        function filterLectures() { searchQuery = document.getElementById('searchInput').value; renderApp(); }
+        
         function toggleComplete(id) {
-            if (completedLectures.includes(id)) {
-                completedLectures = completedLectures.filter(i => i !== id);
-            } else {
-                completedLectures.push(id);
-                triggerConfetti();
-                showToast('عاشت إيدك يا بطل! 💪', 'success');
-            }
-            localStorage.setItem('hameed_completed', JSON.stringify(completedLectures));
-            renderApp();
-            updateStats();
+            if (completedLectures.includes(id)) { completedLectures = completedLectures.filter(i => i !== id); } 
+            else { completedLectures.push(id); triggerConfetti(); showToast('عاشت إيدك! 💪'); }
+            localStorage.setItem('hameed_completed', JSON.stringify(completedLectures)); renderApp(); updateStats();
         }
 
         function updateStats() {
-            let total = 0;
-            allData.forEach(t => total += t.lectures.length);
+            let total = 0; allData.forEach(t => total += t.lectures.length);
             const count = completedLectures.length;
             const percent = total === 0 ? 0 : Math.round((count / total) * 100);
-
             document.getElementById('percentage').innerText = percent + "%";
-            document.getElementById('statsCount').innerText = count;
-            document.getElementById('statsTotal').innerText = total;
+            document.getElementById('statsCount').innerText = count; document.getElementById('statsTotal').innerText = total;
             document.getElementById('progressBar').style.width = percent + "%";
-
             const badge = document.getElementById('statusBadge');
             if (percent === 100) { badge.innerText = "ختمت المادة 🏆"; badge.className = "bg-green-500 text-white px-3 py-1 rounded-lg text-xs font-bold mb-1 shadow-lg"; }
             else if (percent > 50) { badge.innerText = "واصل التقدم 🔥"; badge.className = "bg-orange-500 text-white px-3 py-1 rounded-lg text-xs font-bold mb-1 shadow-lg"; }
             else { badge.innerText = "بداية موفقة 🚀"; badge.className = "bg-white/20 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold mb-1 border border-white/10"; }
         }
 
-        // ================= الفيديو =================
         function openVideoModal(title, url, id, save = true) {
-            if (url === '#') { showToast('المحاضرة قريباً تنزل، انتظرنا! ⏳', 'info'); return; }
-            
-            if (save) {
-                localStorage.setItem('hameed_lastWatched', JSON.stringify({ title, url, id }));
-                checkLastWatched();
-            }
-
+            if (url === '#') { showToast('المحاضرة قريباً! ⏳', 'info'); return; }
+            if (save) { localStorage.setItem('hameed_lastWatched', JSON.stringify({ title, url, id })); checkLastWatched(); }
             const modal = document.getElementById('videoModal');
             document.getElementById('modalTitle').innerText = title;
             document.getElementById('videoContainer').innerHTML = `<iframe src="${url}" class="absolute top-0 left-0 w-full h-full rounded-lg" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-            
             modal.classList.remove('hidden');
-            // Trigger animation
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modal.firstElementChild.classList.remove('scale-95');
-                modal.firstElementChild.classList.add('scale-100');
-            }, 10);
+            setTimeout(() => { modal.classList.remove('opacity-0'); modal.firstElementChild.classList.remove('scale-95'); modal.firstElementChild.classList.add('scale-100'); }, 10);
         }
 
         function closeVideoModal() {
             const modal = document.getElementById('videoModal');
-            modal.classList.add('opacity-0');
-            modal.firstElementChild.classList.remove('scale-100');
-            modal.firstElementChild.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.getElementById('videoContainer').innerHTML = '';
-            }, 300);
+            modal.classList.add('opacity-0'); modal.firstElementChild.classList.remove('scale-100'); modal.firstElementChild.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); document.getElementById('videoContainer').innerHTML = ''; }, 300);
         }
 
         function checkLastWatched() {
             const data = JSON.parse(localStorage.getItem('hameed_lastWatched'));
-            const btn = document.getElementById('resumeContainer');
-            if (data) {
-                document.getElementById('resumeTitle').innerText = data.title;
-                btn.classList.remove('hidden');
-            }
+            if (data) { document.getElementById('resumeTitle').innerText = data.title; document.getElementById('resumeContainer').classList.remove('hidden'); }
         }
+        function resumeLastWatched() { const data = JSON.parse(localStorage.getItem('hameed_lastWatched')); if (data) openVideoModal(data.title, data.url, data.id, false); }
 
-        function resumeLastWatched() {
-            const data = JSON.parse(localStorage.getItem('hameed_lastWatched'));
-            if (data) openVideoModal(data.title, data.url, data.id, false);
-        }
-
-        // ================= أدوات مساعدة (Helpers) =================
         function updateGreeting() {
             const h = new Date().getHours();
-            const msg = h < 12 ? "صباح الخير يا بطل ☀️" : "مساء الخير يا مبدع 🌙";
-            document.getElementById('greetingMsg').innerText = msg;
+            document.getElementById('greetingMsg').innerText = h < 12 ? "صباح الخير يا بطل ☀️" : "مساء الخير يا مبدع 🌙";
             document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-IQ', { weekday: 'long', day: 'numeric', month: 'short' });
         }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
             const colors = type === 'success' ? 'bg-emerald-500' : (type === 'error' ? 'bg-rose-500' : 'bg-blue-500');
-            
-            toast.className = `${colors} text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3 transform translate-y-10 opacity-0 transition-all duration-500 pointer-events-auto min-w-[200px] justify-center font-bold text-sm`;
+            toast.className = `${colors} text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-3 transform translate-y-10 opacity-0 transition-all duration-500 font-bold text-sm justify-center`;
             toast.innerHTML = `<span>${message}</span>`;
-            
             container.appendChild(toast);
-            
-            requestAnimationFrame(() => {
-                toast.classList.remove('translate-y-10', 'opacity-0');
-            });
-
-            setTimeout(() => {
-                toast.classList.add('translate-y-10', 'opacity-0');
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
+            requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
+            setTimeout(() => { toast.classList.add('translate-y-10', 'opacity-0'); setTimeout(() => toast.remove(), 500); }, 3000);
         }
 
-        // Confetti Effect (مؤثرات الاحتفال)
         function triggerConfetti() {
             const canvas = document.getElementById('confetti-canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             const particles = [];
-            for(let i=0; i<60; i++) {
-                particles.push({
-                    x: canvas.width/2, y: canvas.height/2,
-                    vx: (Math.random()-0.5)*15, vy: (Math.random()-0.5)*15 - 5,
-                    color: `hsl(${Math.random()*360}, 100%, 50%)`,
-                    life: 100, size: Math.random()*5+2
-                });
-            }
-            
+            for(let i=0; i<60; i++) particles.push({ x: canvas.width/2, y: canvas.height/2, vx: (Math.random()-0.5)*15, vy: (Math.random()-0.5)*15 - 5, color: `hsl(${Math.random()*360}, 100%, 50%)`, life: 100, size: Math.random()*5+2 });
             function animate() {
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 let active = false;
-                particles.forEach(p => {
-                    if(p.life > 0) {
-                        active = true;
-                        p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.life--; p.size *= 0.96;
-                        ctx.fillStyle = p.color;
-                        ctx.fillRect(p.x, p.y, p.size, p.size);
-                    }
-                });
-                if(active) requestAnimationFrame(animate);
-                else ctx.clearRect(0,0,canvas.width,canvas.height);
+                particles.forEach(p => { if(p.life > 0) { active = true; p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.life--; p.size *= 0.96; ctx.fillStyle = p.color; ctx.fillRect(p.x, p.y, p.size, p.size); } });
+                if(active) requestAnimationFrame(animate); else ctx.clearRect(0,0,canvas.width,canvas.height);
             }
             animate();
         }
-
-        // إغلاق المودال بزر الرجوع
         document.getElementById('passwordInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkLogin() });
     </script>
 </body>
